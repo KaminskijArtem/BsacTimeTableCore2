@@ -11,8 +11,8 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181106180748_AddGroups")]
-    partial class AddGroups
+    [Migration("20181107200952_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,42 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Chair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chair");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Faculty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faculty");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Flow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Flow");
+                });
+
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -79,15 +115,55 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.Property<int>("EduLevel");
 
-                    b.Property<int>("IdFaculty");
+                    b.Property<int>("FacultyId");
 
-                    b.Property<int?>("IdFlow");
+                    b.Property<int?>("FlowId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("FlowId");
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Lecturer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ChairId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChairId");
+
+                    b.ToTable("Lecturers");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AbnameSubject");
+
+                    b.Property<int>("ChairId");
+
+                    b.Property<int>("EduLevel");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChairId");
+
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -196,6 +272,34 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Group", b =>
+                {
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Faculty", "Faculty")
+                        .WithMany("Groups")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Flow", "Flow")
+                        .WithMany("Groups")
+                        .HasForeignKey("FlowId");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Lecturer", b =>
+                {
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Chair", "Chair")
+                        .WithMany("Lecturers")
+                        .HasForeignKey("ChairId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Subject", b =>
+                {
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Chair", "Chair")
+                        .WithMany("Subjects")
+                        .HasForeignKey("ChairId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -9,10 +9,13 @@ namespace BsacTimeTableCore2.Data.DBModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? IdFlow { get; set; }
         public int EduLevel { get; set; }
 
         public int FacultyId { get; set; }
         public Faculty Faculty { get; set; }
+
+        public int? FlowId { get; set; }
+        public Flow Flow { get; set; }
+        //public ICollection<Record> Records { get; set; }
     }
 }
