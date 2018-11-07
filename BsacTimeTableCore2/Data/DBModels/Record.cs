@@ -25,8 +25,8 @@ namespace BsacTimeTableCore2.Data.DBModels
         public int SubjectForId { get; set; }
         public SubjectFor SubjectFor { get; set; }
 
-        //public int SubjectId { get; set; }
-        //public Subject Subject { get; set; }
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; }
 
         public int SubjectTypeId { get; set; }
         public SubjectType SubjectType { get; set; }

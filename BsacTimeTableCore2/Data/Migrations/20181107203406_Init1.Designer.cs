@@ -11,8 +11,8 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181107202320_AddClassroom")]
-    partial class AddClassroom
+    [Migration("20181107203406_Init1")]
+    partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -171,9 +171,13 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.Property<int>("GroupId");
 
+                    b.Property<int>("LecturerId");
+
                     b.Property<int>("SubjOrdinalNumber");
 
                     b.Property<int>("SubjectForId");
+
+                    b.Property<int>("SubjectId");
 
                     b.Property<int>("SubjectTypeId");
 
@@ -187,7 +191,11 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("LecturerId");
+
                     b.HasIndex("SubjectForId");
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("SubjectTypeId");
 
@@ -211,7 +219,7 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.HasIndex("ChairId");
 
-                    b.ToTable("Subject");
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.SubjectFor", b =>
@@ -351,11 +359,12 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Faculty", "Faculty")
                         .WithMany("Groups")
                         .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Flow", "Flow")
                         .WithMany("Groups")
-                        .HasForeignKey("FlowId");
+                        .HasForeignKey("FlowId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Lecturer", b =>
@@ -363,7 +372,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Chair", "Chair")
                         .WithMany("Lecturers")
                         .HasForeignKey("ChairId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Record", b =>
@@ -371,22 +380,32 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Classroom", "Classroom")
                         .WithMany("Record")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Group", "Group")
                         .WithMany("Records")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Lecturer", "Lecturer")
+                        .WithMany("Records")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.SubjectFor", "SubjectFor")
                         .WithMany("Records")
                         .HasForeignKey("SubjectForId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Subject", "Subject")
+                        .WithMany("Records")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.SubjectType", "SubjectType")
                         .WithMany("Records")
                         .HasForeignKey("SubjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Subject", b =>
@@ -394,7 +413,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasOne("BsacTimeTableCore2.Data.DBModels.Chair", "Chair")
                         .WithMany("Subjects")
                         .HasForeignKey("ChairId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

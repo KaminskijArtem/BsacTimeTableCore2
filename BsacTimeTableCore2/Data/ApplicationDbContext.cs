@@ -14,6 +14,7 @@ namespace BsacTimeTableCore2.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Record> Records { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -22,6 +23,11 @@ namespace BsacTimeTableCore2.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

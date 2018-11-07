@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BsacTimeTableCore2.Data.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -62,6 +62,20 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Classroom",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Building = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classroom", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Faculty",
                 columns: table => new
                 {
@@ -85,6 +99,32 @@ namespace BsacTimeTableCore2.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Flow", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubjectFor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectFor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubjectType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,11 +250,11 @@ namespace BsacTimeTableCore2.Data.Migrations
                         column: x => x.ChairId,
                         principalTable: "Chair",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subject",
+                name: "Subjects",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -226,13 +266,13 @@ namespace BsacTimeTableCore2.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subject", x => x.Id);
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Subject_Chair_ChairId",
+                        name: "FK_Subjects_Chair_ChairId",
                         column: x => x.ChairId,
                         principalTable: "Chair",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,11 +294,69 @@ namespace BsacTimeTableCore2.Data.Migrations
                         column: x => x.FacultyId,
                         principalTable: "Faculty",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Groups_Flow_FlowId",
                         column: x => x.FlowId,
                         principalTable: "Flow",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Records",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClassroomId = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    GroupId = table.Column<int>(nullable: false),
+                    LecturerId = table.Column<int>(nullable: false),
+                    SubjOrdinalNumber = table.Column<int>(nullable: false),
+                    SubjectForId = table.Column<int>(nullable: false),
+                    SubjectId = table.Column<int>(nullable: false),
+                    SubjectTypeId = table.Column<int>(nullable: false),
+                    WeekDay = table.Column<int>(nullable: false),
+                    WeekNumber = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Records", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Records_Classroom_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classroom",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Records_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Records_Lecturers_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "Lecturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Records_SubjectFor_SubjectForId",
+                        column: x => x.SubjectForId,
+                        principalTable: "SubjectFor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Records_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Records_SubjectType_SubjectTypeId",
+                        column: x => x.SubjectTypeId,
+                        principalTable: "SubjectType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -318,8 +416,38 @@ namespace BsacTimeTableCore2.Data.Migrations
                 column: "ChairId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subject_ChairId",
-                table: "Subject",
+                name: "IX_Records_ClassroomId",
+                table: "Records",
+                column: "ClassroomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_GroupId",
+                table: "Records",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_LecturerId",
+                table: "Records",
+                column: "LecturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_SubjectForId",
+                table: "Records",
+                column: "SubjectForId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_SubjectId",
+                table: "Records",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_SubjectTypeId",
+                table: "Records",
+                column: "SubjectTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subjects_ChairId",
+                table: "Subjects",
                 column: "ChairId");
         }
 
@@ -341,19 +469,31 @@ namespace BsacTimeTableCore2.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Groups");
-
-            migrationBuilder.DropTable(
-                name: "Lecturers");
-
-            migrationBuilder.DropTable(
-                name: "Subject");
+                name: "Records");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Classroom");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Lecturers");
+
+            migrationBuilder.DropTable(
+                name: "SubjectFor");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "SubjectType");
 
             migrationBuilder.DropTable(
                 name: "Faculty");
