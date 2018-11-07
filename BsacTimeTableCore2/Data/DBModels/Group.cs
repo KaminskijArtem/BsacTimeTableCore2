@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BsacTimeTableCore2.Models.DBModels
+namespace BsacTimeTableCore2.Data.DBModels
 {
     public class Group
     {

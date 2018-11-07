@@ -1,5 +1,5 @@
 ﻿@using BsacTimeTableCore2.Views.Manage
-@using BsacTimeTableCore2.Models.DBModels;
+@using BsacTimeTableCore2.Data.DBModels;
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

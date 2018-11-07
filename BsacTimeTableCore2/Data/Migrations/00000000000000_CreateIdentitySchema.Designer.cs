@@ -126,7 +126,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BsacTimeTableCore2.Models.DBModels.ApplicationUser", b =>
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -185,7 +185,7 @@ namespace BsacTimeTableCore2.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BsacTimeTableCore2.Models.DBModels.ApplicationUser")
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.ApplicationUser")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -193,7 +193,7 @@ namespace BsacTimeTableCore2.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BsacTimeTableCore2.Models.DBModels.ApplicationUser")
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.ApplicationUser")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -206,7 +206,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BsacTimeTableCore2.Models.DBModels.ApplicationUser")
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.ApplicationUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BsacTimeTableCore2.Data;
-using BsacTimeTableCore2.Models.DBModels;
+using BsacTimeTableCore2.Data.DBModels;
 
 namespace BsacTimeTableCore2.Controllers
 {

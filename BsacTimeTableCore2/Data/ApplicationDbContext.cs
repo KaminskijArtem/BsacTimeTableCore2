@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using BsacTimeTableCore2.Models;
-using BsacTimeTableCore2.Models.DBModels;
+using BsacTimeTableCore2.Data.DBModels;
 
 namespace BsacTimeTableCore2.Data
 {

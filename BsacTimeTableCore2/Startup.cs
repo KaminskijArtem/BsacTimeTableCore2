@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Services;
-using BsacTimeTableCore2.Models.DBModels;
+using BsacTimeTableCore2.Data.DBModels;
 
 namespace BsacTimeTableCore2
 {
@@ -43,6 +43,8 @@ namespace BsacTimeTableCore2
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            UpdateDatabase(app);
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -64,6 +66,19 @@ namespace BsacTimeTableCore2
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

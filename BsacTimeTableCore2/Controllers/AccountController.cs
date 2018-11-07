@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Models.AccountViewModels;
 using BsacTimeTableCore2.Services;
-using BsacTimeTableCore2.Models.DBModels;
+using BsacTimeTableCore2.Data.DBModels;
 
 namespace BsacTimeTableCore2.Controllers
 {
