@@ -16,6 +16,7 @@ namespace BsacTimeTableCore2.Data.DBModels
 
         public int? FlowId { get; set; }
         public Flow Flow { get; set; }
-        //public ICollection<Record> Records { get; set; }
+
+        public ICollection<Record> Records { get; set; }
     }
 }

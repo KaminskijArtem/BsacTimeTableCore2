@@ -16,8 +16,8 @@ namespace BsacTimeTableCore2.Data.DBModels
         //public int ClassroomId { get; set; }
         //public Classroom Classroom { get; set; }
 
-        //public int GroupId { get; set; }
-        //public Group Group { get; set; }
+        public int GroupId { get; set; }
+        public Group Group { get; set; }
 
         //public int LecturerId { get; set; }
         //public Lecturer Lecturer { get; set; }
