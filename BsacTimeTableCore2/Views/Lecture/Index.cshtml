@@ -1,0 +1,53 @@
+﻿@using BsacTimeTableCore2.Services;
+
+@model PaginatedList<LectureViewModel>;
+
+
+@{
+    ViewData["Title"] = "Расписание для преподавателей";
+}
+<br>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Введите имя преподавателя (или часть, для поиска): <input type="text" name="searchString" value="@ViewData["searchString"]"/>
+            <input type="submit" value="Поиск" class="btn btn-default" />
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <h4>@(item.NameLecturer)</h4>
+                </td>
+                <td>
+                    <a asp-action="DetailsWeek" asp-route-id="@(item.IdLecturer)" class="btn btn-info">Показать расписание</a>                
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-searchString="@ViewData["searchString"]"
+   class="btn btn-default @prevDisabled">
+    Предыдущая стр.
+</a>
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-searchString="@ViewData["searchString"]"
+   class="btn btn-default @nextDisabled">
+    Следующая стр.
+</a>
+
+<h3>Найдено преподавателей: @Model.TotalCount </h3>

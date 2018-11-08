@@ -15,6 +15,7 @@ namespace BsacTimeTableCore2.Data
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

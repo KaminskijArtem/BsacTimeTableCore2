@@ -1,0 +1,48 @@
+@model List<StudentRecordViewModel>;
+
+
+<h4>@ViewData["currWeek"]-я учебная неделя</h4>
+<h4>@ViewData["groupName"], @ViewData["subgroup"]-я подгруппа</h4>
+@{
+    var dayOfWeek = 0;
+    var lessonsForFourWeeks = new List<StudentRecordViewModel>();
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Время</th>
+            <th colspan="2">1я неделя</th>
+            <th colspan="2">2я неделя</th>
+            <th colspan="2">3я неделя</th>
+            <th colspan="2">4я неделя</th>
+        </tr>
+    </thead>
+    <body>
+        @for(var i = 0; i<Model.Count; i++)
+        {
+            
+            @for(var j = 0; j<lessonsForFourWeeks.Count; j++)
+            {
+                if(lessonsForFourWeeks[j].SubjOrdinalNumber != Model[i].SubjOrdinalNumber || lessonsForFourWeeks[j].WeekDay != Model[i].WeekDay)
+                {
+                    @Html.Partial("_FourLessons", lessonsForFourWeeks)
+                    lessonsForFourWeeks.Clear();
+                }
+            }
+            lessonsForFourWeeks.Add(Model[i]);
+            
+            if (Model[i].WeekDay != dayOfWeek)
+            {
+                dayOfWeek = Model[i].WeekDay;
+                @Html.Partial("_DayName", dayOfWeek)
+            }
+
+            if (i == Model.Count-1)
+            {
+                @Html.Partial("_FourLessons", lessonsForFourWeeks)
+            }
+            
+            
+        }
+    </body>
+</table>

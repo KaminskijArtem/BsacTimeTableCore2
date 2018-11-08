@@ -1,0 +1,54 @@
+﻿@using BsacTimeTableCore2.Services;
+
+@model PaginatedList<GroupViewModel>;
+
+
+@{
+    ViewData["Title"] = "Расписание для студентов";
+}
+<br>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Введите название группы (или часть, для поиска): <input type="text" name="searchString" value="@ViewData["searchString"]"/>
+            <input type="submit" value="Поиск" class="btn btn-default" />
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <h4>@(item.NameGroup)</h4>
+                </td>
+                <td>
+                    <a asp-action="DetailsWeek" asp-route-idgroup="@(item.IdGroup)" asp-route-subgroup=1 class="btn btn-info">Подгруппа 1</a>                
+                    <a asp-action="DetailsWeek" asp-route-idgroup="@(item.IdGroup)" asp-route-subgroup=2 class="btn btn-warning">Подгруппа 2</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-searchString="@ViewData["searchString"]"
+   class="btn btn-default @prevDisabled">
+    Предыдущая стр.
+</a>
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-searchString="@ViewData["searchString"]"
+   class="btn btn-default @nextDisabled">
+    Следующая стр.
+</a>
+
+<h3>Найдено групп: @Model.TotalCount </h3>
