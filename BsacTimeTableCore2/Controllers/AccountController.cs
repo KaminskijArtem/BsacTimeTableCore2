@@ -248,7 +248,7 @@ namespace BsacTimeTableCore2.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(StudentController.Index), "Student");
         }
 
         [HttpPost]
@@ -336,7 +336,7 @@ namespace BsacTimeTableCore2.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(StudentController.Index), "Student");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -456,7 +456,7 @@ namespace BsacTimeTableCore2.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(StudentController.Index), "Student");
             }
         }
 
