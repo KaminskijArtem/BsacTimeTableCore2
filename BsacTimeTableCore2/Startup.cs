@@ -34,6 +34,11 @@ namespace BsacTimeTableCore2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -62,6 +67,9 @@ namespace BsacTimeTableCore2
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Groups}/{action=Index}");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Student}/{action=Index}/{id?}");
