@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BsacTimeTableCore2.Data.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,20 +49,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chair",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chair", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Classroom",
+                name: "Classrooms",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -72,11 +59,25 @@ namespace BsacTimeTableCore2.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Classroom", x => x.Id);
+                    table.PrimaryKey("PK_Classrooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Faculty",
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EduLevel = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lecturers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -85,20 +86,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faculty", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Flow",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Flow", x => x.Id);
+                    table.PrimaryKey("PK_Lecturers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +100,21 @@ namespace BsacTimeTableCore2.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubjectFor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AbnameSubject = table.Column<string>(nullable: true),
+                    EduLevel = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,76 +237,6 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lecturers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ChairId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Lecturers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Lecturers_Chair_ChairId",
-                        column: x => x.ChairId,
-                        principalTable: "Chair",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subjects",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AbnameSubject = table.Column<string>(nullable: true),
-                    ChairId = table.Column<int>(nullable: false),
-                    EduLevel = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Subjects_Chair_ChairId",
-                        column: x => x.ChairId,
-                        principalTable: "Chair",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EduLevel = table.Column<int>(nullable: false),
-                    FacultyId = table.Column<int>(nullable: false),
-                    FlowId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Groups_Faculty_FacultyId",
-                        column: x => x.FacultyId,
-                        principalTable: "Faculty",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Groups_Flow_FlowId",
-                        column: x => x.FlowId,
-                        principalTable: "Flow",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Records",
                 columns: table => new
                 {
@@ -324,9 +257,9 @@ namespace BsacTimeTableCore2.Data.Migrations
                 {
                     table.PrimaryKey("PK_Records", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Records_Classroom_ClassroomId",
+                        name: "FK_Records_Classrooms_ClassroomId",
                         column: x => x.ClassroomId,
-                        principalTable: "Classroom",
+                        principalTable: "Classrooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -401,21 +334,6 @@ namespace BsacTimeTableCore2.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_FacultyId",
-                table: "Groups",
-                column: "FacultyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Groups_FlowId",
-                table: "Groups",
-                column: "FlowId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lecturers_ChairId",
-                table: "Lecturers",
-                column: "ChairId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Records_ClassroomId",
                 table: "Records",
                 column: "ClassroomId");
@@ -444,11 +362,6 @@ namespace BsacTimeTableCore2.Data.Migrations
                 name: "IX_Records_SubjectTypeId",
                 table: "Records",
                 column: "SubjectTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Subjects_ChairId",
-                table: "Subjects",
-                column: "ChairId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -478,7 +391,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Classroom");
+                name: "Classrooms");
 
             migrationBuilder.DropTable(
                 name: "Groups");
@@ -494,15 +407,6 @@ namespace BsacTimeTableCore2.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubjectType");
-
-            migrationBuilder.DropTable(
-                name: "Faculty");
-
-            migrationBuilder.DropTable(
-                name: "Flow");
-
-            migrationBuilder.DropTable(
-                name: "Chair");
         }
     }
 }

@@ -10,9 +10,6 @@ namespace BsacTimeTableCore2.Data.DBModels
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int ChairId { get; set; }
-        public Chair Chair { get; set; }
-
         public ICollection<Record> Records { get; set; }
     }
 }
