@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Data.DBModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BsacTimeTableCore2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class LecturersController : Controller
     {
         private readonly ApplicationDbContext _context;
