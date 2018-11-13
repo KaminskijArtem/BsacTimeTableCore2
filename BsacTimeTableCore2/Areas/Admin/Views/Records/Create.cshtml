@@ -1,0 +1,69 @@
+﻿@model BsacTimeTableCore2.Data.DBModels.Record
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Record</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="WeekNumber" class="control-label"></label>
+                <input asp-for="WeekNumber" class="form-control" />
+                <span asp-validation-for="WeekNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeekDay" class="control-label"></label>
+                <input asp-for="WeekDay" class="form-control" />
+                <span asp-validation-for="WeekDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjOrdinalNumber" class="control-label"></label>
+                <input asp-for="SubjOrdinalNumber" class="form-control" />
+                <span asp-validation-for="SubjOrdinalNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClassroomId" class="control-label"></label>
+                <select asp-for="ClassroomId" class ="form-control" asp-items="ViewBag.ClassroomId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="GroupId" class="control-label"></label>
+                <select asp-for="GroupId" class ="form-control" asp-items="ViewBag.GroupId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LecturerId" class="control-label"></label>
+                <select asp-for="LecturerId" class ="form-control" asp-items="ViewBag.LecturerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectForId" class="control-label"></label>
+                <select asp-for="SubjectForId" class ="form-control" asp-items="ViewBag.SubjectForId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectId" class="control-label"></label>
+                <select asp-for="SubjectId" class ="form-control" asp-items="ViewBag.SubjectId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectTypeId" class="control-label"></label>
+                <select asp-for="SubjectTypeId" class ="form-control" asp-items="ViewBag.SubjectTypeId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BsacTimeTableCore2.Data.DBModels.Record>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.WeekNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WeekDay)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SubjOrdinalNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Classroom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Group)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lecturer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectFor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeekNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeekDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjOrdinalNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classroom.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Group.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lecturer.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subject.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectFor.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectType.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

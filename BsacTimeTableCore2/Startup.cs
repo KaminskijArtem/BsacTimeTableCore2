@@ -69,7 +69,7 @@ namespace BsacTimeTableCore2
             {
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Groups}/{action=Index}");
+                    template: "{area:exists}/{controller=Records}/{action=Index}");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Student}/{action=Index}/{id?}");
