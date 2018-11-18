@@ -1,0 +1,19 @@
+﻿<thead>
+    <tr>
+        <th rowspan="2"></th>
+        <th colspan="6">Понедельник</th>
+        <th colspan="6">Вторник</th>
+        <th colspan="6">Среда</th>
+        <th colspan="6">Четверг</th>
+        <th colspan="6">Пятница</th>
+    </tr>
+    <tr>
+        @for(var i = 1; i < 6; i++)
+        {
+            @for(var j = 1; j < 7; j++)
+            {
+                <th>@j</th>
+            }
+        }
+    </tr>
+</thead>

@@ -1,7 +1,16 @@
-﻿
+﻿@model IEnumerable<BsacTimeTableCore2.Data.DBModels.Group>
+
 @{
     ViewData["Title"] = "Open";
 }
 
-<h2>Open</h2>
+<table class="table table-bordered" style="margin-top: 2px;">
+    @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
+    <tbody>
+        @foreach(var g in Model)
+        {
+            @await Html.PartialAsync("_ManageRecordsOpenRowPartial", g)
+        }
+    </tbody>
+</table>
 

@@ -29,9 +29,10 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Open(int? id)
+        public async Task<IActionResult> Open(int? id)
         {
-            return View();
+            var applicationDbContext = _context.Groups.Where(x => x.FacultyId == id).Include(r => r.Records);
+            return View(await applicationDbContext.ToListAsync());
         }
     }
 }
