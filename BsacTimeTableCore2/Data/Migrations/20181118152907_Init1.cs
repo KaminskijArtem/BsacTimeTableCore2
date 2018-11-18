@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BsacTimeTableCore2.Data.Migrations
 {
-    public partial class Init : Migration
+    public partial class Init1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,17 +63,16 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
+                name: "Faculties",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EduLevel = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groups", x => x.Id);
+                    table.PrimaryKey("PK_Faculties", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +236,26 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FacultyId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Groups_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Records",
                 columns: table => new
                 {
@@ -334,6 +353,11 @@ namespace BsacTimeTableCore2.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Groups_FacultyId",
+                table: "Groups",
+                column: "FacultyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Records_ClassroomId",
                 table: "Records",
                 column: "ClassroomId");
@@ -407,6 +431,9 @@ namespace BsacTimeTableCore2.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubjectType");
+
+            migrationBuilder.DropTable(
+                name: "Faculties");
         }
     }
 }

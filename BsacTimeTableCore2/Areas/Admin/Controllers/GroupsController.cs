@@ -7,12 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Data.DBModels;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BsacTimeTableCore2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,7 +23,8 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // GET: Admin/Groups
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Groups.ToListAsync());
+            var applicationDbContext = _context.Groups.Include(m => m.Faculty);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Admin/Groups/Details/5
@@ -36,19 +35,21 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
+            var mgroup = await _context.Groups
+                .Include(m => m.Faculty)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (@group == null)
+            if (mgroup == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(mgroup);
         }
 
         // GET: Admin/Groups/Create
         public IActionResult Create()
         {
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id");
             return View();
         }
 
@@ -57,15 +58,16 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Create([Bind("Id,Name,FacultyId")] Group mgroup)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@group);
+                _context.Add(mgroup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@group);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            return View(mgroup);
         }
 
         // GET: Admin/Groups/Edit/5
@@ -76,12 +78,13 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.SingleOrDefaultAsync(m => m.Id == id);
-            if (@group == null)
+            var mgroup = await _context.Groups.SingleOrDefaultAsync(m => m.Id == id);
+            if (mgroup == null)
             {
                 return NotFound();
             }
-            return View(@group);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            return View(mgroup);
         }
 
         // POST: Admin/Groups/Edit/5
@@ -89,9 +92,9 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,FacultyId")] Group mgroup)
         {
-            if (id != @group.Id)
+            if (id != mgroup.Id)
             {
                 return NotFound();
             }
@@ -100,12 +103,12 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(@group);
+                    _context.Update(mgroup);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupExists(@group.Id))
+                    if (!GroupExists(mgroup.Id))
                     {
                         return NotFound();
                     }
@@ -116,7 +119,8 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@group);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            return View(mgroup);
         }
 
         // GET: Admin/Groups/Delete/5
@@ -127,14 +131,15 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
+            var mgroup = await _context.Groups
+                .Include(m => m.Faculty)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (@group == null)
+            if (mgroup == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(mgroup);
         }
 
         // POST: Admin/Groups/Delete/5
@@ -142,8 +147,8 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @group = await _context.Groups.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Groups.Remove(@group);
+            var mgroup = await _context.Groups.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Groups.Remove(mgroup);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

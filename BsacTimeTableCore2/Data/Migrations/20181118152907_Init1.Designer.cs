@@ -11,8 +11,8 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181110100329_Init")]
-    partial class Init
+    [Migration("20181118152907_Init1")]
+    partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,16 +86,30 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.ToTable("Classrooms");
                 });
 
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Faculty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faculties");
+                });
+
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("EduLevel");
+                    b.Property<int>("FacultyId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
 
                     b.ToTable("Groups");
                 });
@@ -300,6 +314,14 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Group", b =>
+                {
+                    b.HasOne("BsacTimeTableCore2.Data.DBModels.Faculty", "Faculty")
+                        .WithMany("Groups")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BsacTimeTableCore2.Data.DBModels.Record", b =>
