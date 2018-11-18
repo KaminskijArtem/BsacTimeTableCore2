@@ -26,10 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Student" asp-action="Index" class="navbar-brand">БГАС админка</a>
+                <a asp-area="" asp-controller="Student" asp-action="Index" class="navbar-brand">На главную</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a asp-area="Admin" asp-controller="ManageRecords" asp-action="Index">Изменить расписание</a></li>
                     <li><a asp-area="Admin" asp-controller="Groups" asp-action="Index">Группы</a></li>
                     <li><a asp-area="Admin" asp-controller="Lecturers" asp-action="Index">Преподаватели</a></li>
                     <li><a asp-area="Admin" asp-controller="Classrooms" asp-action="Index">Кабинеты</a></li>
