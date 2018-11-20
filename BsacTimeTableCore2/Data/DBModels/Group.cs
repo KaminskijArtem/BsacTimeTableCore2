@@ -13,6 +13,6 @@ namespace BsacTimeTableCore2.Data.DBModels
         public int FacultyId { get; set; }
         public Faculty Faculty { get; set; }
 
-        public ICollection<Record> Records { get; set; }
+        public List<Record> Records { get; set; }
     }
 }

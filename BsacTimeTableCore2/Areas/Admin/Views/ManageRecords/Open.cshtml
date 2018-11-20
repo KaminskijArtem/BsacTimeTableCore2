@@ -1,16 +1,38 @@
-﻿@model IEnumerable<BsacTimeTableCore2.Data.DBModels.Group>
+﻿@model List<BsacTimeTableCore2.Data.DBModels.Group>
 
 @{
     ViewData["Title"] = "Open";
 }
 
-<table class="table table-bordered" style="margin-top: 2px;">
-    @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
-    <tbody>
-        @foreach(var g in Model)
-        {
-            @await Html.PartialAsync("_ManageRecordsOpenRowPartial", g)
-        }
-    </tbody>
-</table>
+<form asp-action="Open" method="post">
+    <table class="table table-bordered" style="margin-top: 2px;">
+        @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
+        <tbody>
+            @for (int c = 0; c < Model.Count; c++)
+            {
+                <tr>
+                    <td><input asp-for="@Model[c].Name" /></td>
+                    @for (var i = 1; i < 6; i++)
+                    {
+                        for (var j = 1; j < 7; j++)
+                        {
+                            var rec = Model[c].Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).FirstOrDefault();
+                            if (rec == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td>@rec.Date.DayOfWeek | @rec.SubjOrdinalNumber</td>
+                            }
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input asp-for="@Model[0].Records[0].WeekNumber" />
+
+    <input type="submit" value="save" class="btn btn-default" />
+</form>
 
