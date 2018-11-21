@@ -32,7 +32,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         public async Task<IActionResult> Open(int? id)
         {
             var listGroups = await _context.Groups.Where(x => x.FacultyId == id).Include(r => r.Records).ToListAsync();
-            //listGroups = SetUpRecords(listGroups);
+            listGroups = SetUpRecords(listGroups);
             return View(listGroups);
         }
 
@@ -42,15 +42,23 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         }
 
-        //private List<Group> SetUpRecords(List<Group> listGroups)
-        //{
-        //    var lg = new List<Group>();
-        //    foreach(var g in listGroups)
-        //    {
+        private List<Group> SetUpRecords(List<Group> listGroups)
+        {
+            foreach (var g in listGroups)
+            {
+                for (var i = 1; i < 6; i++)
+                {
+                    for (var j = 1; j < 7; j++)
+                    {
+                        if(!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
+                        {
+                            g.Records.Add(new Record { SubjOrdinalNumber = j, Date = DateTime.Today.AddDays(-3).AddDays(i) });
+                        }
+                    }
+                }
+            }
 
-        //    }
-
-        //    return lg;
-        //}
+            return listGroups;
+        }
     }
 }

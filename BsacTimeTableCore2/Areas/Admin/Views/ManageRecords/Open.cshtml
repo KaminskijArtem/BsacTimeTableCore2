@@ -16,7 +16,7 @@
                     {
                         for (var j = 1; j < 7; j++)
                         {
-                            var rec = Model[c].Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).FirstOrDefault().;
+                            var rec = Model[c].Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).FirstOrDefault();
                             if (rec == null)
                             {
                                 <td>
@@ -33,7 +33,7 @@
             }
         </tbody>
     </table>
-    <input hidden="hidden" asp-for="@Model[0].Records[0].WeekNumber" />
+    @*<input hidden="hidden" asp-for="@Model[0].Records[0].WeekNumber" />*@
     <input type="submit" value="save" class="btn btn-default" />
 </form>
 
