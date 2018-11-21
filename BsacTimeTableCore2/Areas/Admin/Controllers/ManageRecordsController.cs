@@ -31,9 +31,9 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         public async Task<IActionResult> Open(int? id)
         {
-            var applicationDbContext = await _context.Groups.Where(x => x.FacultyId == id).Include(r => r.Records).ToListAsync();
-            applicationDbContext.ForEach(x => x.Records.Add(new Record()));
-            return View(applicationDbContext);
+            var listGroups = await _context.Groups.Where(x => x.FacultyId == id).Include(r => r.Records).ToListAsync();
+            //listGroups = SetUpRecords(listGroups);
+            return View(listGroups);
         }
 
         [HttpPost]
@@ -41,5 +41,16 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         {
 
         }
+
+        //private List<Group> SetUpRecords(List<Group> listGroups)
+        //{
+        //    var lg = new List<Group>();
+        //    foreach(var g in listGroups)
+        //    {
+
+        //    }
+
+        //    return lg;
+        //}
     }
 }
