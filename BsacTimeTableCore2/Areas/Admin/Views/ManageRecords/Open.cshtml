@@ -12,22 +12,23 @@
             {
                 <tr>
                     <td>@Model[c].Name</td>
-                    @for (var i = 1; i < 6; i++)
+
+                    @{ var z = 0; }
+                    @foreach (var r in Model[c].Records)
                     {
-                        for (var j = 1; j < 7; j++)
-                        {
-                            var rec = Model[c].Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).FirstOrDefault();
-                            if (rec == null)
-                            {
-                                <td>
-                                    
-                                </td>
-                            }
-                            else
-                            {
-                                <td><input asp-for="@Model[c].Records[0].SubjectId" /></td>
-                            }
-                        }
+                    <td>
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].Id" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].ClassroomId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].Date" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].LecturerId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].GroupId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].LecturerId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectForId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectTypeId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].SubjOrdinalNumber" />
+                        @{z++;}
+                    </td>
                     }
                 </tr>
             }

@@ -12,18 +12,21 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.WeekNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.WeekDay)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SubjOrdinalNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeekNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeekDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjOrdinalNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Classroom)
             </th>
@@ -48,6 +51,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WeekNumber)
             </td>
