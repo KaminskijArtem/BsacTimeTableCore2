@@ -16,12 +16,16 @@
                     @{ var z = 0; }
                     @foreach (var r in Model[c].Records)
                     {
-                    <td>
+                    <td onclick="showModal(this)">
+                        @if (@Model[c].Records[z].SubjectId != 0)
+    {
+                    @Model[c].Records[z].ClassroomId <br>
+                    @Model[c].Records[z].LecturerId <br>
+                    @Model[c].Records[z].SubjectId
+}
                         <input hidden="hidden" asp-for="@Model[c].Records[z].Id" />
-                        <input hidden="hidden" asp-for="@Model[c].Records[z].ClassroomId" />
-                        <input hidden="hidden" asp-for="@Model[c].Records[z].Date" />
-                        <input hidden="hidden" asp-for="@Model[c].Records[z].LecturerId" />
                         <input hidden="hidden" asp-for="@Model[c].Records[z].GroupId" />
+                        <input hidden="hidden" asp-for="@Model[c].Records[z].ClassroomId" />
                         <input hidden="hidden" asp-for="@Model[c].Records[z].LecturerId" />
                         <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectForId" />
                         <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectId" />
@@ -34,7 +38,56 @@
             }
         </tbody>
     </table>
-    @*<input hidden="hidden" asp-for="@Model[0].Records[0].WeekNumber" />*@
-    <input type="submit" value="save" class="btn btn-default" />
+    <input type="submit" value="Сохранить" class="btn btn-default" />
+
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Редактирование</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="exampleModalInputs">
+                    <input /><br>
+                    <input /><br>
+                    <input /><br>
+                    <input /><br>
+                    <input /><br>
+                    <input /><br>
+                    <input />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAndCloseModal()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 
+<script>
+    var globalModalObj;
+
+    function showModal(domObj) {
+        globalModalObj = domObj;
+        $("#exampleModalLong").modal();
+        var jsObjs = $(domObj).find('input');
+        var jsInputs = $('#exampleModalLong input');
+        for (var i = 0; i < jsObjs.length; i++) {
+            $(jsInputs[i]).val($(jsObjs[i]).val());
+        }
+    }
+
+    function saveAndCloseModal() {
+        var jsInputs = $("#exampleModalInputs input");
+        var jsTdInputs = $(globalModalObj).find('input');
+
+        for (var i = 0; i < jsTdInputs.length; i++) {
+            $(jsTdInputs[i]).val($(jsInputs[i]).val());
+        }
+        
+        $("#exampleModalLong").modal("hide");
+    }
+</script>
