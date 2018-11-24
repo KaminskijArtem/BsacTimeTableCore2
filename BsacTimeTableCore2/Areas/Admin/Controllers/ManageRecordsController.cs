@@ -37,21 +37,23 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public void Open(List<Group> groups)
+        public IActionResult Open(List<Group> groups, int? id)
         {
             var insertingRecords = new List<Record>();
             var updatingRecords = new List<Record>();
             foreach (var g in groups)
             {
-                var ir = g.Records.Where(x => (x.Id == 0 && x.SubjectId != 0));
+                var ir = g.Records.Where(x => (x.Id == 0 && x.IsChanged != null));
                 insertingRecords = insertingRecords.Concat(ir).ToList();
-                var ur = g.Records.Where(x => x.Id != 0);
+                var ur = g.Records.Where(x => x.Id != 0 && x.IsChanged != null);
                 updatingRecords = updatingRecords.Concat(ur).ToList();
             }
-
-             _context.Records.AddRange(insertingRecords);  
-             _context.UpdateRange(updatingRecords);
+            insertingRecords.ForEach(x => x.IsChanged = null);
+            updatingRecords.ForEach(x => x.IsChanged = null);
+            _context.Records.AddRange(insertingRecords);
+            _context.UpdateRange(updatingRecords);
             var s = _context.SaveChanges();
+            return Redirect(Request.Path + Request.QueryString);
         }
 
         private List<Group> SetUpRecords(List<Group> listGroups)
@@ -62,7 +64,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 {
                     for (var j = 1; j < 7; j++)
                     {
-                        if(!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
+                        if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
                         {
                             g.Records.Add(new Record { SubjOrdinalNumber = j, Date = new DateTime(2018, 11, 18).AddDays(i) });
                         }

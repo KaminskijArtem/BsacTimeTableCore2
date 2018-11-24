@@ -12,6 +12,7 @@ namespace BsacTimeTableCore2.Data.DBModels
         public int WeekDay { get; set; }
         public int SubjOrdinalNumber { get; set; }
         public DateTime Date { get; set; }
+        public bool? IsChanged { get; set; }
 
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }
