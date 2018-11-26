@@ -60,16 +60,10 @@
                     </button>
                 </div>
                 <div class="modal-body" id="exampleModalInputs">
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input /><br>
-                    <input value="true" />
+                    <div><select id="lecturesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select></div>
+                    <div><select id="subjectsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select></div>
+                    <div><select id="classroomsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select></div>
+                    <input value="true" hidden="hidden" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -80,11 +74,7 @@
     </div>
 </form>
 <br>
-<select class="selectpicker" data-live-search="true">
-    <option>Mustard</option>
-    <option>Ketchup</option>
-    <option>Barbecue</option>
-</select>
+
 
 @section Scripts{
 
@@ -96,27 +86,32 @@
     </environment>
 
     <script>
-        var globalModalObj;
+        //var globalModalObj;
 
         function showModal(domObj) {
-            globalModalObj = domObj;
+            
             $("#exampleModalLong").modal();
-            var jsObjs = $(domObj).find('input');
-            var jsInputs = $('#exampleModalLong input');
-            for (var i = 0; i < jsObjs.length - 1; i++) {
-                jsInputs[i].value = jsObjs[i].value;
-            }
+
+            $(function () {
+                $("#classroomsSelect").val('2');
+            });
+            $('.selectpicker').selectpicker('refresh');
+            //globalModalObj = domObj;
+            //var jsObjs = $(domObj).find('input');
+            //var jsInputs = $('#exampleModalLong input');
+            //for (var i = 0; i < jsObjs.length - 1; i++) {
+            //    jsInputs[i].value = jsObjs[i].value;
+            //}
         }
 
         function saveAndCloseModal() {
-            var jsInputs = $("#exampleModalInputs input");
-            var jsTdInputs = $(globalModalObj).find('input');
 
-            for (var i = 0; i < jsTdInputs.length; i++) {
-                $(jsTdInputs[i]).val($(jsInputs[i]).val());
-            }
+            //var jsInputs = $("#exampleModalInputs input");
+            //var jsTdInputs = $(globalModalObj).find('input');
 
-
+            //for (var i = 0; i < jsTdInputs.length; i++) {
+            //    $(jsTdInputs[i]).val($(jsInputs[i]).val());
+            //}
 
             $("#exampleModalLong").modal("hide");
         }
