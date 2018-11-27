@@ -34,6 +34,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             ViewBag.Lecturers = new SelectList(_context.Lecturers, "Id", "Name");
             ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
             ViewBag.Classrooms = new SelectList(_context.Classrooms, "Id", "Name");
+            ViewBag.SubjectTypes = new SelectList(_context.SubjectTypes, "Id", "Name");
 
             var listGroups = await _context.Groups.Where(x => x.FacultyId == id).Include(r => r.Records).ToListAsync();
             listGroups = SetUpRecords(listGroups);
