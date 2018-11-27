@@ -27,9 +27,9 @@
                         <td onclick="showModal(this)">
                             @if (@Model[c].Records[z].SubjectId != 0)
                             {
-                                <div class="LecturerName">@Model[c].Records[z].LecturerId</div>
-                                <div class="ClassroomName">@Model[c].Records[z].ClassroomId </div>
-                                <div class="SubjectName">@Model[c].Records[z].SubjectId</div>
+                                <div class="LecturerName">@Model[c].Records[z].Lecturer.Name</div>
+                                <div class="ClassroomName">@Model[c].Records[z].Classroom.Name </div>
+                                <div class="SubjectName">@Model[c].Records[z].Subject.Name</div>
                             }
                             <input hidden="hidden" asp-for="@Model[c].Records[z].Id" />
                             <input hidden="hidden" asp-for="@Model[c].Records[z].Date" />
@@ -50,8 +50,8 @@
     </table>
     <input type="submit" value="Сохранить" class="btn btn-default" />
 
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Редактирование</h5>
@@ -60,10 +60,10 @@
                     </button>
                 </div>
                 <div class="modal-body" id="exampleModalInputs">
-                    <div><select id="lecturesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select></div>
-                    <div><select id="classroomsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select></div>
-                    <div><select id="subjectsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select></div>
-                    <div><select id="subjectTypesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select></div>
+                    <div><select id="lecturesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
+                    <div><select id="classroomsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
+                    <div><select id="subjectsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
+                    <div><select id="subjectTypesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
