@@ -18,7 +18,7 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div style="padding-left:15px" class="container">
+        <div @{if (ViewContext.RouteData.Values["Action"].ToString() == "Open") { <text> style="padding-left:15px" </text>  } } class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -36,7 +36,7 @@
                     <li><a asp-area="Admin" asp-controller="Classrooms" asp-action="Index">Кабинеты</a></li>
                     <li><a asp-area="Admin" asp-controller="Subjects" asp-action="Index">Предметы</a></li>
                 </ul>
-                <div style="padding-right:35px">@await Html.PartialAsync("_LoginPartial")</div>
+                <div @{if (ViewContext.RouteData.Values["Action"].ToString() == "Open") { <text> style="padding-right:35px" </text>  } }>@await Html.PartialAsync("_LoginPartial")</div>
             </div>
         </div>
     </nav>
