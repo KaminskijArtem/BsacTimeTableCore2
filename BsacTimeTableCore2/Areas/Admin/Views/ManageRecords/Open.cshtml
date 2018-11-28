@@ -31,12 +31,9 @@
                     @foreach (var r in Model[c].Records)
                     {
                         <td onclick="showModal(this)">
-                            @if (@Model[c].Records[z].SubjectId != 0)
-                            {
-                                <div class="LecturerName">@Model[c].Records[z].Lecturer.Name</div>
-                                <div class="ClassroomName">@Model[c].Records[z].Classroom.Name </div>
-                                <div class="SubjectName">@Model[c].Records[z].Subject.Name</div>
-                            }
+                            <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name</div>
+                            <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name </div>
+                            <div class="SubjectName">@Model[c].Records[z].Subject?.Name</div>
                             <input hidden="hidden" asp-for="@Model[c].Records[z].Id" />
                             <input hidden="hidden" asp-for="@Model[c].Records[z].Date" />
                             <input hidden="hidden" asp-for="@Model[c].Records[z].GroupId" />
