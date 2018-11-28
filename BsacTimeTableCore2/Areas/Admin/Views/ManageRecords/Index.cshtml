@@ -4,18 +4,62 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h2>Index</h2>
+<environment include="Development">
+    <link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
+</environment>
+<environment exclude="Development">
+    <link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+</environment>
+<h2>Выберите факультет и неделю</h2>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Open" method="get">
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
                 <select asp-for="Id" class="form-control" name="id" asp-items="ViewBag.FacultyId"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Open" class="btn btn-default" />
+            <div id="dateFrom" class="form-group input-group date" data-provide="datepicker">
+                <input type="text" class="form-control">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+            <div id="dateTo" class="form-group input-group date" data-provide="datepicker">
+                <input type="text" class="form-control">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
             </div>
         </form>
+
+        <div class="form-group">
+            <input type="submit" value="Открыть" class="btn btn-default" />
+        </div>
     </div>
 </div>
+@section Scripts{
+<environment include="Development">
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ru.min.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ru.min.js"></script>
+</environment>
+
+    <script>
+        $(document).ready(function () {
+            $('.date').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                language: 'ru'
+            });
+            dt1 = new Date();
+            dt1.setDate(dt1.getDate() - 28);
+            dt2 = new Date();
+            dt2.setDate(dt2.getDate() + 56);
+            $('#dateFrom').datepicker("setDate", dt1);
+            $('#dateTo').datepicker("setDate", dt2);
+            
+        })
+    </script>
+}
