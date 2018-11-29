@@ -29,8 +29,13 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Open(int? id)
+        public async Task<IActionResult> Open(int? id, string date)
         {
+            DateTime _date = DateTime.Parse(date);
+            if (_date.DayOfWeek == 0)
+                _date = _date.AddDays(-1);
+            var dateFrom = _date.AddDays(1-(int)_date.DayOfWeek);
+            var dateTo = _date.AddDays(7-(int)_date.DayOfWeek);
             ViewBag.Lecturers = new SelectList(_context.Lecturers, "Id", "Name");
             ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
             ViewBag.Classrooms = new SelectList(_context.Classrooms, "Id", "Name");
@@ -42,12 +47,13 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 .Include("Records.Subject")
                 .Include("Records.Classroom")
                 .ToListAsync();
-            listGroups = SetUpRecords(listGroups);
+            listGroups.ForEach(x => x.Records = x.Records.Where(r => r.Date >= dateFrom && r.Date < dateTo).ToList());//May the GC be with you
+            listGroups = SetUpRecords(listGroups, dateFrom);
             return View(listGroups);
         }
 
         [HttpPost]
-        public IActionResult Open(List<Group> groups, int? id)
+        public IActionResult Open(List<Group> groups)
         {
             var insertingRecords = new List<Record>();
             var updatingRecords = new List<Record>();
@@ -66,7 +72,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             return Redirect(Request.Path + Request.QueryString);
         }
 
-        private List<Group> SetUpRecords(List<Group> listGroups)
+        private List<Group> SetUpRecords(List<Group> listGroups, DateTime dt)
         {
             foreach (var g in listGroups)
             {
@@ -76,7 +82,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                     {
                         if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
                         {
-                            g.Records.Add(new Record { GroupId = g.Id, SubjectForId = 1, SubjOrdinalNumber = j, Date = new DateTime(2018, 11, 18).AddDays(i) });
+                            g.Records.Add(new Record { GroupId = g.Id, SubjectForId = 1, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
                         }
                     }
                 }

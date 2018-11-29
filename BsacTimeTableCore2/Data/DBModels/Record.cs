@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace BsacTimeTableCore2.Data.DBModels
         public int WeekNumber { get; set; }
         public int WeekDay { get; set; }
         public int SubjOrdinalNumber { get; set; }
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public bool? IsChanged { get; set; }
 

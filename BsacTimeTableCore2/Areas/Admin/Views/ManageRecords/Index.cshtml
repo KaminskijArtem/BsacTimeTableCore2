@@ -17,14 +17,8 @@
             <div class="form-group">
                 <select asp-for="Id" class="form-control" name="id" asp-items="ViewBag.FacultyId"></select>
             </div>
-            <div id="dateFrom" class="form-group input-group date" data-provide="datepicker">
-                <input type="text" class="form-control">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-th"></span>
-                </div>
-            </div>
-            <div id="dateTo" class="form-group input-group date" data-provide="datepicker">
-                <input type="text" class="form-control">
+            <div id="date" class="form-group input-group date" data-provide="datepicker">
+                <input name="date" type="text" class="form-control">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>
@@ -49,18 +43,12 @@
 
     <script>
         $(document).ready(function () {
-            $('.date').datepicker({
+            $('#date').datepicker({
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 language: 'ru'
             });
-            dt1 = new Date();
-            dt1.setDate(dt1.getDate() - 28);
-            dt2 = new Date();
-            dt2.setDate(dt2.getDate() + 56);
-            $('#dateFrom').datepicker("setDate", dt1);
-            $('#dateTo').datepicker("setDate", dt2);
-            
+            $('#date').datepicker("setDate", new Date());
         })
     </script>
 }
