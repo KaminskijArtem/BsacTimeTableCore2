@@ -68,6 +68,19 @@ namespace BsacTimeTableCore2.Data.Migrations
 			   (5, 'Консультация')
 
                SET IDENTITY_INSERT [SubjectTypes]  OFF;
+
+
+               insert into [Subjects]
+               values ('T', 1, 'TestSubj')
+
+
+               insert into [Lecturers]
+               values ( 'TestLecturer')
+
+
+               insert into [Classrooms]
+               values ( 1, '222')
+
              ");
         }
 

@@ -11,7 +11,7 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181201151926_Init")]
+    [Migration("20181201153548_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
