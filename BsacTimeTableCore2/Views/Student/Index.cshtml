@@ -6,14 +6,16 @@
 @{
     ViewData["Title"] = "Расписание для студентов";
 }
+
 <br>
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
-        <p>
-            Введите название группы (или часть, для поиска): <input type="text" name="searchString" value="@ViewData["searchString"]"/>
+        <div>
+            Введите название группы (или часть, для поиска): <input type="text" name="searchString" value="@ViewData["searchString"]" />
             <input type="submit" value="Поиск" class="btn btn-default" />
-        </p>
+        </div>
     </div>
+    
 </form>
 
 <table class="table">
@@ -25,7 +27,7 @@
                     <h4>@(item.NameGroup)</h4>
                 </td>
                 <td>
-                    <a asp-action="DetailsWeek" asp-route-idgroup="@(item.IdGroup)" asp-route-subgroup=1 class="btn btn-info">Подгруппа 1</a>                
+                    <a asp-action="DetailsWeek" asp-route-idgroup="@(item.IdGroup)" asp-route-subgroup=1 class="btn btn-info">Подгруппа 1</a>
                     <a asp-action="DetailsWeek" asp-route-idgroup="@(item.IdGroup)" asp-route-subgroup=2 class="btn btn-warning">Подгруппа 2</a>
                 </td>
             </tr>
@@ -52,3 +54,4 @@
 </a>
 
 <h3>Найдено групп: @Model.TotalCount </h3>
+
