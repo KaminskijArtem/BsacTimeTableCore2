@@ -81,6 +81,9 @@ namespace BsacTimeTableCore2.Data.Migrations
                insert into [Classrooms]
                values ( 1, '222')
 
+                insert into [Groups]
+               values ( 1, 'TestGroup')
+
              ");
         }
 
