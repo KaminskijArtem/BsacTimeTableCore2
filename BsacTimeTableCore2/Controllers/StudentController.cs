@@ -50,12 +50,11 @@ namespace BsacTimeTableCore2.Controllers
                            new[] { subgroup, 3 }.Contains(r.SubjectForId)
 
                            //    && (r.DateTo >= DateTime.Today && r.DateFrom <= DateTime.Today)
-                           orderby r.WeekDay, r.SubjOrdinalNumber, r.WeekNumber
+                           orderby r.WeekDay, r.SubjOrdinalNumber
                            select new StudentRecordViewModel
                             {
                                 IdRecord = r.Id,
                                 WeekDay = r.WeekDay,
-                                WeekNumber = r.WeekNumber,
                                 LectureName = l.Name,
                                 SubjectName = s.AbnameSubject,
                                 SubjOrdinalNumber = r.SubjOrdinalNumber,

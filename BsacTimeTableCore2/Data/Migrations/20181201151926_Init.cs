@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BsacTimeTableCore2.Data.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -117,7 +117,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubjectType",
+                name: "SubjectTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -126,7 +126,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubjectType", x => x.Id);
+                    table.PrimaryKey("PK_SubjectTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,13 +264,13 @@ namespace BsacTimeTableCore2.Data.Migrations
                     ClassroomId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     GroupId = table.Column<int>(nullable: false),
+                    IsChanged = table.Column<bool>(nullable: true),
                     LecturerId = table.Column<int>(nullable: false),
                     SubjOrdinalNumber = table.Column<int>(nullable: false),
                     SubjectForId = table.Column<int>(nullable: false),
                     SubjectId = table.Column<int>(nullable: false),
                     SubjectTypeId = table.Column<int>(nullable: false),
-                    WeekDay = table.Column<int>(nullable: false),
-                    WeekNumber = table.Column<int>(nullable: false)
+                    WeekDay = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -306,9 +306,9 @@ namespace BsacTimeTableCore2.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Records_SubjectType_SubjectTypeId",
+                        name: "FK_Records_SubjectTypes_SubjectTypeId",
                         column: x => x.SubjectTypeId,
-                        principalTable: "SubjectType",
+                        principalTable: "SubjectTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -430,7 +430,7 @@ namespace BsacTimeTableCore2.Data.Migrations
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "SubjectType");
+                name: "SubjectTypes");
 
             migrationBuilder.DropTable(
                 name: "Faculties");

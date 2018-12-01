@@ -150,8 +150,6 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.Property<int>("WeekDay");
 
-                    b.Property<int>("WeekNumber");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");

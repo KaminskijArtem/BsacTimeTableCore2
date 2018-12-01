@@ -11,8 +11,8 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181124101152_AddIsChanged")]
-    partial class AddIsChanged
+    [Migration("20181201151926_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -151,8 +151,6 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.Property<int>("WeekDay");
 
-                    b.Property<int>("WeekNumber");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
@@ -207,7 +205,7 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SubjectType");
+                    b.ToTable("SubjectTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

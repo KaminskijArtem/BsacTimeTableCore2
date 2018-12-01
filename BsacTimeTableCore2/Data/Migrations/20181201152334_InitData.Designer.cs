@@ -11,8 +11,8 @@ using System;
 namespace BsacTimeTableCore2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181127190018_AddSubjectTypes")]
-    partial class AddSubjectTypes
+    [Migration("20181201152334_InitData")]
+    partial class InitData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -150,8 +150,6 @@ namespace BsacTimeTableCore2.Data.Migrations
                     b.Property<int>("SubjectTypeId");
 
                     b.Property<int>("WeekDay");
-
-                    b.Property<int>("WeekNumber");
 
                     b.HasKey("Id");
 
