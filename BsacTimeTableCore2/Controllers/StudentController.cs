@@ -33,10 +33,21 @@ namespace BsacTimeTableCore2.Controllers
             return View(PaginatedList<GroupViewModel>.Create(groups, page ?? 1, 10));
         }
 
-        public IActionResult DetailsWeek(int idgroup, int subgroup)
+        public IActionResult DetailsWeek(int idgroup, int subgroup, string date)
         {
-            IAcessoryService service = new AcessoryService();
-            ViewData["currWeek"] = service.GetCurrentWeek();
+            DateTime dt;
+            if (date == null)
+            {
+                dt = DateTime.Today;
+                if (dt.DayOfWeek == DayOfWeek.Sunday)
+                    dt = dt.AddDays(1);
+            }
+            else
+                dt = DateTime.Parse(date);
+
+            var dateFrom = dt.AddDays(1 - (int)dt.DayOfWeek);
+            var dateTo = dt.AddDays(7 - (int)dt.DayOfWeek);
+
             ViewData["subgroup"] = subgroup;
             ViewData["groupName"] = (from p in _context.Groups
                                      where p.Id == idgroup
@@ -47,7 +58,8 @@ namespace BsacTimeTableCore2.Controllers
                            join s in _context.Subjects on r.SubjectId equals s.Id
                            join c in _context.Classrooms on r.ClassroomId equals c.Id
                            where (r.GroupId == idgroup) &&
-                           new[] { subgroup, 3 }.Contains(r.SubjectForId)
+                           new[] { subgroup, 3 }.Contains(r.SubjectForId) &&
+                           (r.Date >= dateFrom &&  r.Date < dateTo)
 
                            //    && (r.DateTo >= DateTime.Today && r.DateFrom <= DateTime.Today)
                            orderby r.WeekDay, r.SubjOrdinalNumber

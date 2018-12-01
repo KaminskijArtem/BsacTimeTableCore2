@@ -82,7 +82,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                     {
                         if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
                         {
-                            g.Records.Add(new Record { GroupId = g.Id, SubjectForId = 1, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
+                            g.Records.Add(new Record { GroupId = g.Id, SubjectForId = 3, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
                         }
                     }
                 }

@@ -87,10 +87,7 @@
                 autoclose: true,
                 language: 'ru'
             });
-            var today = new Date()
-            if (today.getDay() == 0)
-                today = today + 1;
-            $('#date').datepicker("setDate", today);
+            $('#date').datepicker("setDate", new Date());
         })
     </script>
 }
