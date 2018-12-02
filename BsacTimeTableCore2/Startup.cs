@@ -50,7 +50,7 @@ namespace BsacTimeTableCore2
         {
             UpdateDatabase(app);
 
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
