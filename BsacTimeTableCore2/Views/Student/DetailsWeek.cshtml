@@ -1,4 +1,5 @@
-@model List<StudentRecordViewModel>;
+@model List<BsacTimeTableCore2.Data.DBModels.Record>
+
 <environment include="Development">
     <link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
 </environment>
@@ -30,44 +31,69 @@
 <div>@ViewData["groupName"], @ViewData["subgroup"]-я подгруппа</div>
 @{
     var dayOfWeek = 0;
-    var lessonsForFourWeeks = new List<StudentRecordViewModel>();
 }
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Время</th>
-            <th colspan="2">1я неделя</th>
-            <th colspan="2">2я неделя</th>
-            <th colspan="2">3я неделя</th>
-            <th colspan="2">4я неделя</th>
+            <th>Предмет</th>
+            <th>Преподаватель</th>
+            <th>Кабинет</th>
+            <th>Тип занятия</th>
         </tr>
     </thead>
-    @for (var i = 0; i < Model.Count; i++)
-    {
-
-        @for (var j = 0; j < lessonsForFourWeeks.Count; j++)
+    <tbody>
+        @foreach (var item in Model)
         {
-            if (lessonsForFourWeeks[j].SubjOrdinalNumber != Model[i].SubjOrdinalNumber || lessonsForFourWeeks[j].WeekDay != Model[i].WeekDay)
+            @if ((int)item.Date.DayOfWeek != dayOfWeek)
             {
-                @Html.Partial("_FourLessons", lessonsForFourWeeks)
-                lessonsForFourWeeks.Clear();
+
+                dayOfWeek = (int)item.Date.DayOfWeek;
+
+
+                <tr>
+                    @Html.Partial("_DayName", dayOfWeek)
+
+                </tr>
             }
-        }
-        lessonsForFourWeeks.Add(Model[i]);
-
-        if (Model[i].WeekDay != dayOfWeek)
-        {
-            dayOfWeek = Model[i].WeekDay;
-            @Html.Partial("_DayName", dayOfWeek)
-        }
-
-        if (i == Model.Count - 1)
-        {
-            @Html.Partial("_FourLessons", lessonsForFourWeeks)
+            <tr>
+                @Html.Partial("_TimeTD", item.SubjOrdinalNumber)
+                <td>@item.Subject.Name</td>
+                <td>@item.Lecturer.Name</td>
+                <td>@item.Classroom.Name</td>
+                <td>@item.SubjectType.Name</td>
+            </tr>
         }
 
 
-    }
+
+        @*@for (var i = 0; i < Model.Count; i++)
+            {
+
+                @for (var j = 0; j < lessonsForFourWeeks.Count; j++)
+                {
+                    if (lessonsForFourWeeks[j].SubjOrdinalNumber != Model[i].SubjOrdinalNumber || lessonsForFourWeeks[j].WeekDay != Model[i].WeekDay)
+                    {
+                        @Html.Partial("_FourLessons", lessonsForFourWeeks)
+                        lessonsForFourWeeks.Clear();
+                    }
+                }
+                lessonsForFourWeeks.Add(Model[i]);
+
+                if (Model[i].WeekDay != dayOfWeek)
+                {
+                    dayOfWeek = Model[i].WeekDay;
+                    @Html.Partial("_DayName", dayOfWeek)
+                }
+
+                if (i == Model.Count - 1)
+                {
+                    @Html.Partial("_FourLessons", lessonsForFourWeeks)
+                }
+
+
+            }*@
+    </tbody>
 </table>
 
 @section Scripts{
@@ -87,7 +113,11 @@
                 autoclose: true,
                 language: 'ru'
             });
-            $('#date').datepicker("setDate", new Date());
+            var date = new Date();
+            var n = date.getDay();
+            if (n == 0)
+                date.setDate(date.getDate() + 1);
+            $('#date').datepicker("setDate", date);
         })
     </script>
 }

@@ -78,7 +78,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             {
                 for (var i = 1; i < 6; i++)
                 {
-                    for (var j = 1; j < 7; j++)
+                    for (var j = 1; j < 8; j++)
                     {
                         if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
                         {

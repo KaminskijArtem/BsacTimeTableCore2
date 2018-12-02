@@ -47,11 +47,10 @@ namespace BsacTimeTableCore2.Controllers
                            where (r.Id == id)
 
                            //    && (r.DateTo >= DateTime.Today && r.DateFrom <= DateTime.Today)
-                           orderby r.WeekDay, r.SubjOrdinalNumber
+                           orderby r.Date, r.SubjOrdinalNumber
                            select new LectureRecordViewModel
                             {
                                 IdRecord = r.Id,
-                                WeekDay = r.WeekDay,
                                 GroupName = l.Name,
                                 SubjectName = s.AbnameSubject,
                                 SubjOrdinalNumber = r.SubjOrdinalNumber,

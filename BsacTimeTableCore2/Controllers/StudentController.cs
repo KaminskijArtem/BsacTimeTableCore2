@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsacTimeTableCore2.Controllers
 {
@@ -49,31 +50,17 @@ namespace BsacTimeTableCore2.Controllers
             var dateTo = dt.AddDays(7 - (int)dt.DayOfWeek);
 
             ViewData["subgroup"] = subgroup;
-            ViewData["groupName"] = (from p in _context.Groups
-                                     where p.Id == idgroup
-                                     select p.Name).First();///sdfsdfsdffds
+            ViewData["groupName"] = _context.Groups.Where(p => p.Id == idgroup).First().Name; 
 
-            var records = (from r in _context.Records
-                           join l in _context.Lecturers on r.LecturerId equals l.Id
-                           join s in _context.Subjects on r.SubjectId equals s.Id
-                           join c in _context.Classrooms on r.ClassroomId equals c.Id
-                           where (r.GroupId == idgroup) &&
+            var records = _context.Records.Where(r => (r.GroupId == idgroup) &&
                            new[] { subgroup, 3 }.Contains(r.SubjectForId) &&
-                           (r.Date >= dateFrom &&  r.Date < dateTo)
-
-                           //    && (r.DateTo >= DateTime.Today && r.DateFrom <= DateTime.Today)
-                           orderby r.WeekDay, r.SubjOrdinalNumber
-                           select new StudentRecordViewModel
-                            {
-                                IdRecord = r.Id,
-                                WeekDay = r.WeekDay,
-                                LectureName = l.Name,
-                                SubjectName = s.AbnameSubject,
-                                SubjOrdinalNumber = r.SubjOrdinalNumber,
-                                Classroom = c.Name + " (к." + c.Building + ")",
-                                IdSubjectType = r.SubjectTypeId
-                            }
-            ).ToList();
+                           (r.Date >= dateFrom && r.Date < dateTo))
+                           .Include(x => x.Lecturer)
+                           .Include(x => x.Subject)
+                           .Include(x => x.Classroom)
+                           .Include(x => x.SubjectType)
+                           .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
+                           .ToList();
 
             return View(records);
         }

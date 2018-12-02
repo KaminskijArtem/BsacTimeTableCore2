@@ -9,7 +9,6 @@ namespace BsacTimeTableCore2.Data.DBModels
     public class Record
     {
         public int Id { get; set; }
-        public int WeekDay { get; set; }
         public int SubjOrdinalNumber { get; set; }
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
