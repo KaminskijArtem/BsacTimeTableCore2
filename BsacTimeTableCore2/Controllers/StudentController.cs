@@ -8,6 +8,7 @@ using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace BsacTimeTableCore2.Controllers
 {
@@ -44,7 +45,7 @@ namespace BsacTimeTableCore2.Controllers
                     dt = dt.AddDays(1);
             }
             else
-                dt = DateTime.Parse(date);
+                dt = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
             var dateFrom = dt.AddDays(1 - (int)dt.DayOfWeek);
             var dateTo = dt.AddDays(7 - (int)dt.DayOfWeek);

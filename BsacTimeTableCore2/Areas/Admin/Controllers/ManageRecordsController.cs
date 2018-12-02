@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BsacTimeTableCore2.Data;
@@ -31,7 +32,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         public async Task<IActionResult> Open(int? id, string date)
         {
-            DateTime _date = DateTime.Parse(date);
+            DateTime _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (_date.DayOfWeek == 0)
                 _date = _date.AddDays(-1);
             var dateFrom = _date.AddDays(1-(int)_date.DayOfWeek);
