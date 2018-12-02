@@ -70,7 +70,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,WeekNumber,WeekDay,SubjOrdinalNumber,Date,ClassroomId,GroupId,LecturerId,SubjectForId,SubjectId,SubjectTypeId")] Record record)
+        public async Task<IActionResult> Create([Bind("Id,WeekDay,SubjOrdinalNumber,Date,ClassroomId,GroupId,LecturerId,SubjectForId,SubjectId,SubjectTypeId")] Record record)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +114,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,WeekNumber,WeekDay,SubjOrdinalNumber,Date,ClassroomId,GroupId,LecturerId,SubjectForId,SubjectId,SubjectTypeId")] Record record)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,WeekDay,SubjOrdinalNumber,Date,ClassroomId,GroupId,LecturerId,SubjectForId,SubjectId,SubjectTypeId")] Record record)
         {
             if (id != record.Id)
             {
