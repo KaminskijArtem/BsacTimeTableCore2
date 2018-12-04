@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Services;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsacTimeTableCore2.Controllers
 {
@@ -32,32 +34,42 @@ namespace BsacTimeTableCore2.Controllers
             return View(PaginatedList<LectureViewModel>.Create(lecturers, page ?? 1, 10));
         }
         
-        public IActionResult DetailsWeek(int id)
+        public IActionResult DetailsWeek(int id, string date)
         {
-            IAcessoryService service = new AcessoryService();
-            ViewData["currWeek"] = service.GetCurrentWeek();
-            ViewData["lectureName"] = (from p in _context.Lecturers
-                                     where p.Id == id
-                                     select p.Name).First();
+            DateTime dt;
+            if (date == null)
+            {
+                dt = DateTime.Today;
+                if (dt.DayOfWeek == DayOfWeek.Sunday)
+                    dt = dt.AddDays(1);
+            }
+            else
+                dt = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-            var records = (from r in _context.Records
-                           join l in _context.Groups on r.GroupId equals l.Id
-                           join s in _context.Subjects on r.SubjectId equals s.Id
-                           join c in _context.Classrooms on r.ClassroomId equals c.Id
-                           where (r.Id == id)
+            var dateFrom = dt.AddDays(1 - (int)dt.DayOfWeek);
+            var dateTo = dt.AddDays(7 - (int)dt.DayOfWeek);
 
-                           //    && (r.DateTo >= DateTime.Today && r.DateFrom <= DateTime.Today)
-                           orderby r.Date, r.SubjOrdinalNumber
-                           select new LectureRecordViewModel
-                            {
-                                IdRecord = r.Id,
-                                GroupName = l.Name,
-                                SubjectName = s.AbnameSubject,
-                                SubjOrdinalNumber = r.SubjOrdinalNumber,
-                                Classroom = c.Name + " (к." + c.Building + ")",
-                                IdSubjectType = r.SubjectTypeId
-                            }
-            ).ToList();
+            ViewData["lectureName"] = _context.Lecturers.Where(p => p.Id == id).First().Name;
+
+            var records = _context.Records.Where(r => (r.LecturerId == id) &&
+                           (r.Date >= dateFrom && r.Date < dateTo))
+                           .Include(x => x.Group)
+                           .Include(x => x.Subject)
+                           .Include(x => x.Classroom)
+                           .Include(x => x.SubjectType)
+                           .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
+                           //.GroupBy(l => new { l.SubjectTypeId, l.Date, l.ClassroomId, l.SubjOrdinalNumber })
+                           //.OrderBy(x => x.Key.Date).ThenBy(x => x.Key.SubjOrdinalNumber)
+                           .Select(g => new LectureRecordViewModel
+                           {
+                               ClassroomName = g.Classroom.Name,
+                               Date = g.Date,
+                               GroupName = g.Group.Name,
+                               SubjectName = g.Subject.Name,
+                               SubjectTypeName = g.SubjectType.Name,
+                               SubjOrdinalNumber = g.SubjOrdinalNumber
+                           })
+                           .ToList();
 
             return View(records);
         }

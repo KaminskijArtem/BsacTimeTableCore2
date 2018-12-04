@@ -62,7 +62,7 @@ namespace BsacTimeTableCore2.Data.Migrations
 
                insert into [SubjectTypes] (Id, Name) values
                (1, 'Лекция'), 
-               (2, 'Лаба'), 
+               (2, 'ЛР'), 
                (3, 'ПЗ'),
 			   (4, 'Экзамен'),
 			   (5, 'Консультация'),
