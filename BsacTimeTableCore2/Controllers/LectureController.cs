@@ -57,17 +57,16 @@ namespace BsacTimeTableCore2.Controllers
                            .Include(x => x.Subject)
                            .Include(x => x.Classroom)
                            .Include(x => x.SubjectType)
-                           .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
-                           //.GroupBy(l => new { l.SubjectTypeId, l.Date, l.ClassroomId, l.SubjOrdinalNumber })
-                           //.OrderBy(x => x.Key.Date).ThenBy(x => x.Key.SubjOrdinalNumber)
+                           .GroupBy(l => new { l.SubjectType, l.Date, l.Classroom, l.SubjOrdinalNumber, l.Subject })
+                           .OrderBy(x => x.Key.Date).ThenBy(x => x.Key.SubjOrdinalNumber)
                            .Select(g => new LectureRecordViewModel
                            {
-                               ClassroomName = g.Classroom.Name,
-                               Date = g.Date,
-                               GroupName = g.Group.Name,
-                               SubjectName = g.Subject.Name,
-                               SubjectTypeName = g.SubjectType.Name,
-                               SubjOrdinalNumber = g.SubjOrdinalNumber
+                               ClassroomName = g.Key.Classroom.Name,
+                               Date = g.Key.Date,
+                               GroupName = string.Join(", ", g.Select(i => i.Group.Name)),
+                               SubjectName = g.Key.Subject.Name,
+                               SubjectTypeName = g.Key.SubjectType.Name,
+                               SubjOrdinalNumber = g.Key.SubjOrdinalNumber
                            })
                            .ToList();
 
