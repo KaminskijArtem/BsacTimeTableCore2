@@ -10,13 +10,15 @@ namespace BsacTimeTableCore2.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "Эл. адрес")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Запомнить?")]
         public bool RememberMe { get; set; }
     }
 }
