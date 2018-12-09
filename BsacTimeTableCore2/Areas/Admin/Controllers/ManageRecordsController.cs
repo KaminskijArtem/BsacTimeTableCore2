@@ -39,7 +39,9 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             var dateTo = _date.AddDays(7-(int)_date.DayOfWeek);
             ViewBag.Lecturers = new SelectList(_context.Lecturers, "Id", "Name");
             ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
-            ViewBag.Classrooms = new SelectList(_context.Classrooms, "Id", "Name");
+            var classrooms = _context.Classrooms.ToList();
+            classrooms.ForEach(x => x.Name = x.Name + " (к." + x.Building + ")");
+            ViewBag.Classrooms = new SelectList(classrooms, "Id", "Name");
             ViewBag.SubjectTypes = new SelectList(_context.SubjectTypes, "Id", "Name");
 
             var listGroups = await _context.Groups.Where(x => x.FacultyId == id)
@@ -48,7 +50,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 .Include("Records.Subject")
                 .Include("Records.Classroom")
                 .ToListAsync();
-            listGroups.ForEach(x => x.Records = x.Records.Where(r => r.Date >= dateFrom && r.Date < dateTo).ToList());//May the GC be with you
+            listGroups.ForEach(x => x.Records = x.Records.Where(r => r.Date >= dateFrom && r.Date < dateTo).ToList());//TODO: Refactor to custom join
             listGroups = SetUpRecords(listGroups, dateFrom);
             return View(listGroups);
         }

@@ -60,7 +60,7 @@
                 @Html.Partial("_TimeTD", item.SubjOrdinalNumber)
                 <td>@item.Subject.Name</td>
                 <td>@item.Lecturer.Name</td>
-                <td>@item.Classroom.Name</td>
+                <td>@(item.Classroom.Name + " (к." + item.Classroom.Building + ")")</td>
                 <td>@item.SubjectType.Name</td>
             </tr>
         }

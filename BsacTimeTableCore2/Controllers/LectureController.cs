@@ -61,7 +61,7 @@ namespace BsacTimeTableCore2.Controllers
                            .OrderBy(x => x.Key.Date).ThenBy(x => x.Key.SubjOrdinalNumber)
                            .Select(g => new LectureRecordViewModel
                            {
-                               ClassroomName = g.Key.Classroom.Name,
+                               ClassroomName = g.Key.Classroom.Name + " (ê." + g.Key.Classroom.Building + ")",
                                Date = g.Key.Date,
                                GroupName = string.Join(", ", g.Select(i => i.Group.Name)),
                                SubjectName = g.Key.Subject.Name,
