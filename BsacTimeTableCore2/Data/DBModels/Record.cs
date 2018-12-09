@@ -13,6 +13,7 @@ namespace BsacTimeTableCore2.Data.DBModels
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public bool? IsChanged { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }

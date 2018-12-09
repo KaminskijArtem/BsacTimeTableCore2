@@ -44,6 +44,7 @@
                             <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectTypeId" class="SubjectTypeId" />
                             <input hidden="hidden" asp-for="@Model[c].Records[z].SubjOrdinalNumber" />
                             <input hidden="hidden" asp-for="@Model[c].Records[z].IsChanged" class="IsChanged" />
+                            <input hidden="hidden" asp-for="@Model[c].Records[z].IsDeleted" class="IsDeleted" />
                             @{z++;}
                         </td>
                     }
@@ -51,7 +52,7 @@
             }
         </tbody>
     </table>
-    <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-default" /></div>
+    <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-success" /></div>
 
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
@@ -69,7 +70,7 @@
                     <div><select id="subjectTypesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteAndCloseModal()">Удалить</button>
                     <button type="button" class="btn btn-primary" onclick="saveAndCloseModal()">Сохранить</button>
                 </div>
             </div>
@@ -105,6 +106,7 @@
 
         function saveAndCloseModal() {
             $(globalModalObj).find('.IsChanged').val(true);
+            $(globalModalObj).find('.IsDeleted').val(null);
             $(globalModalObj).find('.LecturerId').val($("#lecturesSelect").val());
             $(globalModalObj).find('.ClassroomId').val($("#classroomsSelect").val());
             $(globalModalObj).find('.SubjectId').val($("#subjectsSelect").val());
@@ -114,6 +116,19 @@
             $(globalModalObj).find('.ClassroomName').text($("#classroomsSelect :selected").text());
             $(globalModalObj).find('.SubjectName').text($("#subjectsSelect :selected").text());
 
+            $("#exampleModalLong").modal("hide");
+        }
+
+        function deleteAndCloseModal() {
+            $(globalModalObj).find('.IsChanged').val(null);
+            $(globalModalObj).find('.IsDeleted').val(true);
+            $(globalModalObj).find('.LecturerName').text("");
+            $(globalModalObj).find('.ClassroomName').text("");
+            $(globalModalObj).find('.SubjectName').text("");
+            $(globalModalObj).find('.LecturerId').val(null);
+            $(globalModalObj).find('.ClassroomId').val(null);
+            $(globalModalObj).find('.SubjectId').val(null);
+            $(globalModalObj).find('.SubjectTypeId').val(null);
             $("#exampleModalLong").modal("hide");
         }
     </script>

@@ -56,19 +56,23 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Open(List<Group> groups)
         {
+            var deletingRecords = new List<Record>();
             var insertingRecords = new List<Record>();
             var updatingRecords = new List<Record>();
             foreach (var g in groups)
             {
                 var ir = g.Records.Where(x => (x.Id == 0 && x.IsChanged != null));
                 insertingRecords = insertingRecords.Concat(ir).ToList();
-                var ur = g.Records.Where(x => x.Id != 0 && x.IsChanged != null);
+                var ur = g.Records.Where(x => x.Id != 0 && x.IsChanged != null && x.IsDeleted == null);
                 updatingRecords = updatingRecords.Concat(ur).ToList();
+                var dl = g.Records.Where(x => x.Id != 0 && x.IsDeleted != null);
+                deletingRecords = deletingRecords.Concat(dl).ToList();
             }
             insertingRecords.ForEach(x => x.IsChanged = null);
             updatingRecords.ForEach(x => x.IsChanged = null);
             _context.Records.AddRange(insertingRecords);
             _context.UpdateRange(updatingRecords);
+            _context.RemoveRange(deletingRecords);
             var s = _context.SaveChanges();
             return Redirect(Request.Path + Request.QueryString);
         }
