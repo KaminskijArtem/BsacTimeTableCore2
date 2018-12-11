@@ -51,7 +51,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // GET: Admin/Groups/Create
         public IActionResult Create()
         {
-            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id");
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Name");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Name", mgroup.FacultyId);
             return View(mgroup);
         }
 
@@ -85,7 +85,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Name", mgroup.FacultyId);
             return View(mgroup);
         }
 
@@ -121,7 +121,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Id", mgroup.FacultyId);
+            ViewData["FacultyId"] = new SelectList(_context.Faculties, "Id", "Name", mgroup.FacultyId);
             return View(mgroup);
         }
 
