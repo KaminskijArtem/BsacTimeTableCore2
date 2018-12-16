@@ -43,6 +43,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             classrooms.ForEach(x => x.Name = x.Name + " (к." + x.Building + ")");
             ViewBag.Classrooms = new SelectList(classrooms, "Id", "Name");
             ViewBag.SubjectTypes = new SelectList(_context.SubjectTypes, "Id", "Name");
+            ViewBag.DateFrom = dateFrom;
 
             var listGroups = await _context.Groups.Where(x => x.FacultyId == id)
                 .Include(r => r.Records)
