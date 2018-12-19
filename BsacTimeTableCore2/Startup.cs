@@ -12,6 +12,7 @@ using BsacTimeTableCore2.Data;
 using BsacTimeTableCore2.Models;
 using BsacTimeTableCore2.Services;
 using BsacTimeTableCore2.Data.DBModels;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace BsacTimeTableCore2
 {
@@ -34,6 +35,11 @@ namespace BsacTimeTableCore2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueCountLimit = int.MaxValue;
+            });
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
@@ -50,7 +56,7 @@ namespace BsacTimeTableCore2
         {
             UpdateDatabase(app);
 
-            if (!env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();

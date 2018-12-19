@@ -9,6 +9,9 @@
         padding-right: 1px;
         padding-left: 1px;
     }
+    th {
+        text-align: center;
+    }
 </style>
 <environment include="Development">
     <link rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" />
@@ -30,7 +33,7 @@
                     @{ var z = 0; }
                     @foreach (var r in Model[c].Records)
                     {
-                        <td onclick="showModal(this)">
+                        <td @{if (z % 3 != 2) { <text> hidden="hidden" </text>  } } onclick="showModal(this)">
                             <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name</div>
                             <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name </div>
                             <div class="SubjectName">@Model[c].Records[z].Subject?.Name</div>
@@ -55,14 +58,45 @@
     <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-success" /></div>
 
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Редактирование</h5>
+                    <label class="form-check-label" for="defaultCheck1">
+                        Показать/спрятать подгруппы:
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <table hidden="hidden">
+                    <tr>
+                        <th>
+                            1я подгруппа
+                        </th>
+                        <th>
+                            2я подгруппа
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="modal-body" id="exampleModalInputs1">
+                                <div><select id="lecturesSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
+                                <div><select id="classroomsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
+                                <div><select id="subjectsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
+                                <div><select id="subjectTypesSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="modal-body" id="exampleModalInputs2">
+                                <div><select id="lecturesSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
+                                <div><select id="classroomsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
+                                <div><select id="subjectsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
+                                <div><select id="subjectTypesSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
                 <div class="modal-body" id="exampleModalInputs">
                     <div><select id="lecturesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                     <div><select id="classroomsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>

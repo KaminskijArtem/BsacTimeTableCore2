@@ -88,13 +88,16 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 {
                     for (var j = 1; j < 8; j++)
                     {
-                        if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i)).Any())
+                        for (var ij = 1; ij < 4; ij++)
                         {
-                            g.Records.Add(new Record { GroupId = g.Id, SubjectForId = 3, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
+                            if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i && x.SubjectForId == ij)).Any())
+                            {
+                                g.Records.Add(new Record { GroupId = g.Id, SubjectForId = ij, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
+                            }
                         }
                     }
                 }
-                g.Records = g.Records.OrderBy(x => x.Date.Date).ThenBy(x => x.SubjOrdinalNumber).ToList();
+                g.Records = g.Records.OrderBy(x => x.Date.Date).ThenBy(x => x.SubjOrdinalNumber).ThenBy(x => x.SubjectForId).ToList();
             }
 
             return listGroups;
