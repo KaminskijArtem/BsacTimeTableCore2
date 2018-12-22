@@ -40,13 +40,16 @@
                                 <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
                                 <div class="SubjectName">@Model[c].Records[z].Subject?.Name @Model[c].Records[z + 1].Subject?.Name</div>
                             }
-                            <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
-                            <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
-                            <div class="SubjectName">@Model[c].Records[z + 2].Subject?.Name</div>
+                            else
+                            {
+                                <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
+                                <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
+                                <div class="SubjectName">@Model[c].Records[z + 2].Subject?.Name</div>
+                            }
 
                             @for (var i = 0; i < 3; i++)
                             {
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" class=@("Id"+(i+1))/>
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" />
                                 <input hidden="hidden" asp-for="@Model[c].Records[z+i].Date" />
                                 <input hidden="hidden" asp-for="@Model[c].Records[z+i].GroupId" />
                                 <input hidden="hidden" asp-for="@Model[c].Records[z+i].ClassroomId" class=@("ClassroomId"+(i+1)) />
@@ -89,7 +92,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="modal-body">
+                            <div class="modal-body" id="ModalInputs1">
                                 <div><select id="lecturesSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                                 <div><select id="classroomsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
                                 <div><select id="subjectsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
@@ -97,7 +100,7 @@
                             </div>
                         </td>
                         <td>
-                            <div class="modal-body">
+                            <div class="modal-body" id="ModalInputs2">
                                 <div><select id="lecturesSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                                 <div><select id="classroomsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
                                 <div><select id="subjectsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
@@ -154,7 +157,7 @@
             $("#subjectsSelect3").val($(domObj).find('.SubjectId3').val());
             $("#subjectTypesSelect3").val($(domObj).find('.SubjectTypeId3').val());
 
-            if ($(domObj).find('.Id1').val() != 0 || $(domObj).find('.Id2').val() != 0) {
+            if ($(domObj).find('.LecturerId1').val() != 0 || $(domObj).find('.LecturerId2').val() != 0) {
                 $('#defaultCheck1').prop("checked", true);
             }
             else {
@@ -166,43 +169,92 @@
             $('.selectpicker').selectpicker('refresh');
         }
 
-        function isPassedCheckInputs() {
+        function isPassedCheckInputs(id) {
             var isPass = true;
-            if ($('#defaultCheck1').is(":checked")) {
-                
-            }
-            else {
-                $("#ModalInputs .selectpicker").each(function () {
-                    if ($(this).val() == null) {
-                        $(this).next().css('background-color', '#d9534f');
-                        isPass = false;
-                    }
-                });
-                setTimeout(function () {
-                    $("#ModalInputs .selectpicker").next().css('background-color', '');
-                }, 100);
-            }
+
+            $(id + " .selectpicker").each(function () {
+                if ($(this).val() == null) {
+                    $(this).next().css('background-color', '#d9534f');
+                    isPass = false;
+                }
+            });
+            setTimeout(function () {
+                $(id + " .selectpicker").next().css('background-color', '');
+            }, 100);
+
             return isPass;
         }
 
         function saveAndCloseModal() {
-            if (!isPassedCheckInputs())
-                return;
-
             if ($('#defaultCheck1').is(":checked")) {
-                $(globalModalObj).find('.IsChanged1').val(true);
-                $(globalModalObj).find('.IsChanged2').val(true);
-                $(globalModalObj).find('.IsDeleted1').val(null);
-                $(globalModalObj).find('.IsDeleted2').val(null);
-                $(globalModalObj).find('.IsDeleted3').val(true);
-                $(globalModalObj).find('.LecturerName')
-                    .text($("#lecturesSelect1 :selected").text() + " " + $("#lecturesSelect2 :selected").text());
-                $(globalModalObj).find('.ClassroomName')
-                    .text($("#classroomsSelect1 :selected").text() + " " + $("#classroomsSelect2 :selected").text());
-                $(globalModalObj).find('.SubjectName')
-                    .text($("#subjectsSelect1 :selected").text() + " " + $("#subjectsSelect2 :selected").text());
+                var isPassed1 = isPassedCheckInputs("#ModalInputs1");
+                var isPassed2 = isPassedCheckInputs("#ModalInputs2");
+                if (!isPassed1 && !isPassed2)
+                    return;
+                if (isPassed1 && isPassed2) {
+                    $(globalModalObj).find('.IsChanged1').val(true);
+                    $(globalModalObj).find('.IsChanged2').val(true);
+                    $(globalModalObj).find('.IsDeleted1').val(null);
+                    $(globalModalObj).find('.IsDeleted2').val(null);
+                    $(globalModalObj).find('.IsDeleted3').val(true);
+                    $(globalModalObj).find('.LecturerName')
+                        .text($("#lecturesSelect1 :selected").text() + " " + $("#lecturesSelect2 :selected").text());
+                    $(globalModalObj).find('.ClassroomName')
+                        .text($("#classroomsSelect1 :selected").text() + " " + $("#classroomsSelect2 :selected").text());
+                    $(globalModalObj).find('.SubjectName')
+                        .text($("#subjectsSelect1 :selected").text() + " " + $("#subjectsSelect2 :selected").text());
+
+                    $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
+                    $(globalModalObj).find('.ClassroomId1').val($("#classroomsSelect1").val());
+                    $(globalModalObj).find('.SubjectId1').val($("#subjectsSelect1").val());
+                    $(globalModalObj).find('.SubjectTypeId1').val($("#subjectTypesSelect1").val());
+
+                    $(globalModalObj).find('.LecturerId2').val($("#lecturesSelect2").val());
+                    $(globalModalObj).find('.ClassroomId2').val($("#classroomsSelect2").val());
+                    $(globalModalObj).find('.SubjectId2').val($("#subjectsSelect2").val());
+                    $(globalModalObj).find('.SubjectTypeId2').val($("#subjectTypesSelect2").val());
+                }
+                else if (isPassed1) {
+                    $(globalModalObj).find('.IsChanged1').val(true);
+                    $(globalModalObj).find('.IsChanged2').val(null);
+                    $(globalModalObj).find('.IsDeleted1').val(null);
+                    $(globalModalObj).find('.IsDeleted2').val(true);
+                    $(globalModalObj).find('.IsDeleted3').val(true);
+                    $(globalModalObj).find('.LecturerName')
+                        .text($("#lecturesSelect1 :selected").text());
+                    $(globalModalObj).find('.ClassroomName')
+                        .text($("#classroomsSelect1 :selected").text());
+                    $(globalModalObj).find('.SubjectName')
+                        .text($("#subjectsSelect1 :selected").text());
+
+                    $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
+                    $(globalModalObj).find('.ClassroomId1').val($("#classroomsSelect1").val());
+                    $(globalModalObj).find('.SubjectId1').val($("#subjectsSelect1").val());
+                    $(globalModalObj).find('.SubjectTypeId1').val($("#subjectTypesSelect1").val());
+                }
+                else if (isPassed2) {
+                    $(globalModalObj).find('.IsChanged1').val(null);
+                    $(globalModalObj).find('.IsChanged2').val(true);
+                    $(globalModalObj).find('.IsDeleted1').val(true);
+                    $(globalModalObj).find('.IsDeleted2').val(null);
+                    $(globalModalObj).find('.IsDeleted3').val(true);
+                    $(globalModalObj).find('.LecturerName')
+                        .text($("#lecturesSelect2 :selected").text());
+                    $(globalModalObj).find('.ClassroomName')
+                        .text($("#classroomsSelect2 :selected").text());
+                    $(globalModalObj).find('.SubjectName')
+                        .text($("#subjectsSelect2 :selected").text());
+
+                    $(globalModalObj).find('.LecturerId2').val($("#lecturesSelect2").val());
+                    $(globalModalObj).find('.ClassroomId2').val($("#classroomsSelect2").val());
+                    $(globalModalObj).find('.SubjectId2').val($("#subjectsSelect2").val());
+                    $(globalModalObj).find('.SubjectTypeId2').val($("#subjectTypesSelect2").val());
+                }
             }
             else {
+                if (!isPassedCheckInputs("#ModalInputs"))
+                    return;
+
                 $(globalModalObj).find('.IsChanged3').val(true);
                 $(globalModalObj).find('.IsDeleted1').val(true);
                 $(globalModalObj).find('.IsDeleted2').val(true);
@@ -211,21 +263,12 @@
                 $(globalModalObj).find('.LecturerName').text($("#lecturesSelect3 :selected").text());
                 $(globalModalObj).find('.ClassroomName').text($("#classroomsSelect3 :selected").text());
                 $(globalModalObj).find('.SubjectName').text($("#subjectsSelect3 :selected").text());
+
+                $(globalModalObj).find('.LecturerId3').val($("#lecturesSelect3").val());
+                $(globalModalObj).find('.ClassroomId3').val($("#classroomsSelect3").val());
+                $(globalModalObj).find('.SubjectId3').val($("#subjectsSelect3").val());
+                $(globalModalObj).find('.SubjectTypeId3').val($("#subjectTypesSelect3").val());
             }
-            $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
-            $(globalModalObj).find('.ClassroomId1').val($("#classroomsSelect1").val());
-            $(globalModalObj).find('.SubjectId1').val($("#subjectsSelect1").val());
-            $(globalModalObj).find('.SubjectTypeId1').val($("#subjectTypesSelect1").val());
-
-            $(globalModalObj).find('.LecturerId2').val($("#lecturesSelect2").val());
-            $(globalModalObj).find('.ClassroomId2').val($("#classroomsSelect2").val());
-            $(globalModalObj).find('.SubjectId2').val($("#subjectsSelect2").val());
-            $(globalModalObj).find('.SubjectTypeId2').val($("#subjectTypesSelect2").val());
-
-            $(globalModalObj).find('.LecturerId3').val($("#lecturesSelect3").val());
-            $(globalModalObj).find('.ClassroomId3').val($("#classroomsSelect3").val());
-            $(globalModalObj).find('.SubjectId3').val($("#subjectsSelect3").val());
-            $(globalModalObj).find('.SubjectTypeId3').val($("#subjectTypesSelect3").val());
 
             $("#exampleModalLong").modal("hide");
         }
