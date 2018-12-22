@@ -166,7 +166,29 @@
             $('.selectpicker').selectpicker('refresh');
         }
 
+        function isPassedCheckInputs() {
+            var isPass = true;
+            if ($('#defaultCheck1').is(":checked")) {
+                
+            }
+            else {
+                $("#ModalInputs .selectpicker").each(function () {
+                    if ($(this).val() == null) {
+                        $(this).next().css('background-color', '#d9534f');
+                        isPass = false;
+                    }
+                });
+                setTimeout(function () {
+                    $("#ModalInputs .selectpicker").next().css('background-color', '');
+                }, 100);
+            }
+            return isPass;
+        }
+
         function saveAndCloseModal() {
+            if (!isPassedCheckInputs())
+                return;
+
             if ($('#defaultCheck1').is(":checked")) {
                 $(globalModalObj).find('.IsChanged1').val(true);
                 $(globalModalObj).find('.IsChanged2').val(true);
