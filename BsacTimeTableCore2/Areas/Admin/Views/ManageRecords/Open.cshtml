@@ -9,6 +9,7 @@
         padding-right: 1px;
         padding-left: 1px;
     }
+
     th {
         text-align: center;
     }
@@ -30,25 +31,33 @@
                 <tr>
                     <td>@Model[c].Name</td>
 
-                    @{ var z = 0; }
-                    @foreach (var r in Model[c].Records)
+                    @for (var z = 0; z < Model[c].Records.Count(); z += 3)
                     {
-                        <td @{if (z % 3 != 2) { <text> hidden="hidden" </text>  } } onclick="showModal(this)">
-                            <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name</div>
-                            <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name </div>
-                            <div class="SubjectName">@Model[c].Records[z].Subject?.Name</div>
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].Id" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].Date" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].GroupId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].ClassroomId" class="ClassroomId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].LecturerId" class="LecturerId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectForId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectId" class="SubjectId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].SubjectTypeId" class="SubjectTypeId" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].SubjOrdinalNumber" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].IsChanged" class="IsChanged" />
-                            <input hidden="hidden" asp-for="@Model[c].Records[z].IsDeleted" class="IsDeleted" />
-                            @{z++;}
+                        <td onclick="showModal(this)">
+                            @if (Model[c].Records[z].Id != 0 || Model[c].Records[z + 1].Id != 0)
+                            {
+                                <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
+                                <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
+                                <div class="SubjectName">@Model[c].Records[z].Subject?.Name @Model[c].Records[z + 1].Subject?.Name</div>
+                            }
+                            <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
+                            <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
+                            <div class="SubjectName">@Model[c].Records[z + 2].Subject?.Name</div>
+
+                            @for (var i = 0; i < 3; i++)
+                            {
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" class=@("Id"+(i+1))/>
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Date" />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].GroupId" />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].ClassroomId" class=@("ClassroomId"+(i+1)) />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].LecturerId" class=@("LecturerId"+(i+1)) />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectForId" />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectId" class=@("SubjectId"+(i+1)) />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectTypeId" class=@("SubjectTypeId"+(i+1)) />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjOrdinalNumber" />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsChanged" class=@("IsChanged"+(i+1)) />
+                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsDeleted" class=@("IsDeleted"+(i+1)) />
+                            }
                         </td>
                     }
                 </tr>
@@ -64,12 +73,12 @@
                     <label class="form-check-label" for="defaultCheck1">
                         Показать/спрятать подгруппы:
                     </label>
-                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <input class="form-check-input" type="checkbox" id="defaultCheck1" onclick="changeModalInputs()">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <table hidden="hidden">
+                <table hidden="hidden" id="ModalInputsSubgroups">
                     <tr>
                         <th>
                             1я подгруппа
@@ -80,7 +89,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="modal-body" id="exampleModalInputs1">
+                            <div class="modal-body">
                                 <div><select id="lecturesSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                                 <div><select id="classroomsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
                                 <div><select id="subjectsSelect1" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
@@ -88,7 +97,7 @@
                             </div>
                         </td>
                         <td>
-                            <div class="modal-body" id="exampleModalInputs2">
+                            <div class="modal-body">
                                 <div><select id="lecturesSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                                 <div><select id="classroomsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
                                 <div><select id="subjectsSelect2" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
@@ -97,11 +106,11 @@
                         </td>
                     </tr>
                 </table>
-                <div class="modal-body" id="exampleModalInputs">
-                    <div><select id="lecturesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
-                    <div><select id="classroomsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
-                    <div><select id="subjectsSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
-                    <div><select id="subjectTypesSelect" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
+                <div class="modal-body" id="ModalInputs">
+                    <div><select id="lecturesSelect3" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
+                    <div><select id="classroomsSelect3" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
+                    <div><select id="subjectsSelect3" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
+                    <div><select id="subjectTypesSelect3" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" onclick="deleteAndCloseModal()">Удалить</button>
@@ -130,40 +139,97 @@
             globalModalObj = domObj;
             $("#exampleModalLong").modal();
 
-            $("#lecturesSelect").val($(domObj).find('.LecturerId').val());
-            $("#classroomsSelect").val($(domObj).find('.ClassroomId').val());
-            $("#subjectsSelect").val($(domObj).find('.SubjectId').val());
-            $("#subjectTypesSelect").val($(domObj).find('.SubjectTypeId').val());
+            $("#lecturesSelect1").val($(domObj).find('.LecturerId1').val());
+            $("#classroomsSelect1").val($(domObj).find('.ClassroomId1').val());
+            $("#subjectsSelect1").val($(domObj).find('.SubjectId1').val());
+            $("#subjectTypesSelect1").val($(domObj).find('.SubjectTypeId1').val());
+
+            $("#lecturesSelect2").val($(domObj).find('.LecturerId2').val());
+            $("#classroomsSelect2").val($(domObj).find('.ClassroomId2').val());
+            $("#subjectsSelect2").val($(domObj).find('.SubjectId2').val());
+            $("#subjectTypesSelect2").val($(domObj).find('.SubjectTypeId2').val());
+
+            $("#lecturesSelect3").val($(domObj).find('.LecturerId3').val());
+            $("#classroomsSelect3").val($(domObj).find('.ClassroomId3').val());
+            $("#subjectsSelect3").val($(domObj).find('.SubjectId3').val());
+            $("#subjectTypesSelect3").val($(domObj).find('.SubjectTypeId3').val());
+
+            if ($(domObj).find('.Id1').val() != 0 || $(domObj).find('.Id2').val() != 0) {
+                $('#defaultCheck1').prop("checked", true);
+            }
+            else {
+                $('#defaultCheck1').prop("checked", false);
+            }
+
+            changeModalInputs();
 
             $('.selectpicker').selectpicker('refresh');
         }
 
         function saveAndCloseModal() {
-            $(globalModalObj).find('.IsChanged').val(true);
-            $(globalModalObj).find('.IsDeleted').val(null);
-            $(globalModalObj).find('.LecturerId').val($("#lecturesSelect").val());
-            $(globalModalObj).find('.ClassroomId').val($("#classroomsSelect").val());
-            $(globalModalObj).find('.SubjectId').val($("#subjectsSelect").val());
-            $(globalModalObj).find('.SubjectTypeId').val($("#subjectTypesSelect").val());
+            if ($('#defaultCheck1').is(":checked")) {
+                $(globalModalObj).find('.IsChanged1').val(true);
+                $(globalModalObj).find('.IsChanged2').val(true);
+                $(globalModalObj).find('.IsDeleted1').val(null);
+                $(globalModalObj).find('.IsDeleted2').val(null);
+                $(globalModalObj).find('.IsDeleted3').val(true);
+                $(globalModalObj).find('.LecturerName')
+                    .text($("#lecturesSelect1 :selected").text() + " " + $("#lecturesSelect2 :selected").text());
+                $(globalModalObj).find('.ClassroomName')
+                    .text($("#classroomsSelect1 :selected").text() + " " + $("#classroomsSelect2 :selected").text());
+                $(globalModalObj).find('.SubjectName')
+                    .text($("#subjectsSelect1 :selected").text() + " " + $("#subjectsSelect2 :selected").text());
+            }
+            else {
+                $(globalModalObj).find('.IsChanged3').val(true);
+                $(globalModalObj).find('.IsDeleted1').val(null);
+                $(globalModalObj).find('.IsDeleted2').val(null);
+                $(globalModalObj).find('.IsDeleted3').val(true);
 
-            $(globalModalObj).find('.LecturerName').text($("#lecturesSelect :selected").text());
-            $(globalModalObj).find('.ClassroomName').text($("#classroomsSelect :selected").text());
-            $(globalModalObj).find('.SubjectName').text($("#subjectsSelect :selected").text());
+                $(globalModalObj).find('.LecturerName').text($("#lecturesSelect3 :selected").text());
+                $(globalModalObj).find('.ClassroomName').text($("#classroomsSelect3 :selected").text());
+                $(globalModalObj).find('.SubjectName').text($("#subjectsSelect3 :selected").text());
+            }
+            $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
+            $(globalModalObj).find('.ClassroomId1').val($("#classroomsSelect1").val());
+            $(globalModalObj).find('.SubjectId1').val($("#subjectsSelect1").val());
+            $(globalModalObj).find('.SubjectTypeId1').val($("#subjectTypesSelect1").val());
+
+            $(globalModalObj).find('.LecturerId2').val($("#lecturesSelect2").val());
+            $(globalModalObj).find('.ClassroomId2').val($("#classroomsSelect2").val());
+            $(globalModalObj).find('.SubjectId2').val($("#subjectsSelect2").val());
+            $(globalModalObj).find('.SubjectTypeId2').val($("#subjectTypesSelect2").val());
+
+            $(globalModalObj).find('.LecturerId3').val($("#lecturesSelect3").val());
+            $(globalModalObj).find('.ClassroomId3').val($("#classroomsSelect3").val());
+            $(globalModalObj).find('.SubjectId3').val($("#subjectsSelect3").val());
+            $(globalModalObj).find('.SubjectTypeId3').val($("#subjectTypesSelect3").val());
 
             $("#exampleModalLong").modal("hide");
         }
 
         function deleteAndCloseModal() {
-            $(globalModalObj).find('.IsChanged').val(null);
-            $(globalModalObj).find('.IsDeleted').val(true);
+            $(globalModalObj).find('.IsChanged1').val(null);
+            $(globalModalObj).find('.IsDeleted1').val(true);
+            $(globalModalObj).find('.IsChanged2').val(null);
+            $(globalModalObj).find('.IsDeleted2').val(true);
+            $(globalModalObj).find('.IsChanged3').val(null);
+            $(globalModalObj).find('.IsDeleted3').val(true);
             $(globalModalObj).find('.LecturerName').text("");
             $(globalModalObj).find('.ClassroomName').text("");
             $(globalModalObj).find('.SubjectName').text("");
-            $(globalModalObj).find('.LecturerId').val(null);
-            $(globalModalObj).find('.ClassroomId').val(null);
-            $(globalModalObj).find('.SubjectId').val(null);
-            $(globalModalObj).find('.SubjectTypeId').val(null);
             $("#exampleModalLong").modal("hide");
+        }
+
+        function changeModalInputs() {
+            if ($('#defaultCheck1').is(":checked")) {
+                $('#ModalInputsSubgroups').show();
+                $('#ModalInputs').hide();
+            }
+            else {
+                $('#ModalInputsSubgroups').hide();
+                $('#ModalInputs').show();
+            }
         }
     </script>
 }
