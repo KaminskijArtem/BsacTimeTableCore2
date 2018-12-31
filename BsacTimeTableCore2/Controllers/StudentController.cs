@@ -50,6 +50,7 @@ namespace BsacTimeTableCore2.Controllers
             var dateFrom = dt.AddDays(1 - (int)dt.DayOfWeek);
             var dateTo = dt.AddDays(7 - (int)dt.DayOfWeek);
 
+            ViewData["date"] = dt.ToString("dd/MM/yyyy");
             ViewData["subgroup"] = subgroup;
             ViewData["groupName"] = _context.Groups.Where(p => p.Id == idgroup).First().Name; 
 

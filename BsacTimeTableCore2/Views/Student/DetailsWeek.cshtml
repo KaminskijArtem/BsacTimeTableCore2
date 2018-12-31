@@ -84,11 +84,7 @@
                 autoclose: true,
                 language: 'ru'
             });
-            var date = new Date();
-            var n = date.getDay();
-            if (n == 0)
-                date.setDate(date.getDate() + 1);
-            $('#date').datepicker("setDate", date);
+            $('#date').datepicker("setDate", "@ViewData["date"]");
         })
     </script>
 }
