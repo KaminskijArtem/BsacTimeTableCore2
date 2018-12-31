@@ -33,7 +33,7 @@
 
                     @for (var z = 0; z < Model[c].Records.Count(); z += 3)
                     {
-                        <td onclick="showModal(this)">
+                        <td @{if (Model[c].Records[z].SubjOrdinalNumber >= 5) { <text> class="567lesson" hidden="hidden" </text>  } } onclick="showModal(this)">
                             @if (Model[c].Records[z].Id != 0 || Model[c].Records[z + 1].Id != 0)
                             {
                                 <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
@@ -68,7 +68,10 @@
         </tbody>
     </table>
     <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-success" /></div>
-
+    <label class="form-check-label" for="defaultCheck2">
+        Показать/спрятать 5,6,7 пары:
+    </label>
+    <input class="form-check-input" type="checkbox" id="defaultCheck2" onclick="changeShow567lessons()">
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -296,5 +299,16 @@
                 $('#ModalInputs').show();
             }
         }
+        function changeShow567lessons() {
+            if ($('#defaultCheck2').is(":checked")) {
+                $('.567lesson').show();
+                $('.columnDayName').attr('colspan', 7);
+            }
+            else {
+                $('.567lesson').hide();
+                $('.columnDayName').attr('colspan', 4);
+            }
+        }
+        
     </script>
 }
