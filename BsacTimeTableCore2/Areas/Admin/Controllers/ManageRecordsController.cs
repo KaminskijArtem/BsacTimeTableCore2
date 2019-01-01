@@ -30,6 +30,14 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             return View();
         }
 
+        public FileResult DownloadTTInDocx()
+        {
+
+            var filepath = @"c:\Users\Sagamore\Downloads\ПримерноеТЗ.docx";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
+            return File(fileBytes, "application/x-msdownload", "ПримерноеТЗ.docx");
+        }
+
         public async Task<IActionResult> Open(int? id, string date)
         {
             DateTime _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);

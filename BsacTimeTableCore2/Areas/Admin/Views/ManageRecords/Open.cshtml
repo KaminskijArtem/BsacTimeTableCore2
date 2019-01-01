@@ -67,11 +67,15 @@
             }
         </tbody>
     </table>
+    <div style="display:inline;">
+        <label class="form-check-label" for="defaultCheck2">
+            Показать/спрятать 5,6,7 пары:
+        </label>
+        <input class="form-check-input" type="checkbox" id="defaultCheck2" onclick="changeShow567lessons()">
+    </div>
+    <div style="display:inline; padding-left:20px" onclick="downloadTTInDocx()"><input value="Скачать в формате .docx" class="btn btn-info" /></div>
     <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-success" /></div>
-    <label class="form-check-label" for="defaultCheck2">
-        Показать/спрятать 5,6,7 пары:
-    </label>
-    <input class="form-check-input" type="checkbox" id="defaultCheck2" onclick="changeShow567lessons()">
+
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -299,6 +303,7 @@
                 $('#ModalInputs').show();
             }
         }
+
         function changeShow567lessons() {
             if ($('#defaultCheck2').is(":checked")) {
                 $('.567lesson').show();
@@ -309,6 +314,10 @@
                 $('.columnDayName').attr('colspan', 4);
             }
         }
-        
+
+        function downloadTTInDocx() {
+            window.location = "@Url.Action("DownloadTTInDocx")";
+        }
+
     </script>
 }
