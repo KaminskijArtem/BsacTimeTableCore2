@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BsacTimeTableCore2.Areas.Admin.Controllers
 {
@@ -17,10 +20,12 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
     public class ManageRecordsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ManageRecordsController(ApplicationDbContext context)
+        public ManageRecordsController(ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -32,10 +37,15 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         public FileResult DownloadTTInDocx()
         {
+            var path = _hostingEnvironment.WebRootPath + "\\documents\\emptyFile.docx";
+            using (WordprocessingDocument wdDoc = WordprocessingDocument.Open(path, true))
+            {
+                wdDoc.MainDocumentPart.Document.RemoveAllChildren();
+                wdDoc.Save();
+            }
 
-            var filepath = @"c:\Users\Sagamore\Downloads\ПримерноеТЗ.docx";
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filepath);
-            return File(fileBytes, "application/x-msdownload", "ПримерноеТЗ.docx");
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            return File(fileBytes, "application/x-msdownload", "1.docx");
         }
 
         public async Task<IActionResult> Open(int? id, string date)
