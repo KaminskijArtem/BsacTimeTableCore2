@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace BsacTimeTableCore2.Areas.Admin.Controllers
 {
@@ -50,6 +51,11 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         public async Task<IActionResult> Open(int? id, string date)
         {
+            ViewBag.groupsJSON = JsonConvert.SerializeObject(await _context
+                .Groups
+                .Where(x => x.FacultyId == id)
+                .ToListAsync());
+
             DateTime _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (_date.DayOfWeek == 0)
                 _date = _date.AddDays(-1);
@@ -119,6 +125,13 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             }
 
             return listGroups;
+        }
+
+        // GET: Admin/Records/GetRecordsByGroupId
+        public async Task<string> GetRecordsByGroupId(int id)
+        {
+            var applicationDbContext = _context.Records.Select(x => x.Subject.Name);
+            return JsonConvert.SerializeObject(await applicationDbContext.ToListAsync());
         }
     }
 }

@@ -20,7 +20,7 @@
 <environment exclude="Development">
     <link href="~/lib/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 </environment>
-
+<div id="groupsDiv" hidden="hidden">@ViewBag.groupsJSON</div>
 <form asp-action="Open" asp-route-id=@Context.Request.Query["id"] asp-route-date=@Context.Request.Query["date"] method="post">
 
     <table class="table table-bordered" style="margin-top: 2px;">
@@ -100,7 +100,7 @@
                     <tr>
                         <td>
                             <div class="modal-body" id="ModalInputs1">
-                                <div><select id="lecturesSelect1" title="Ничего не выбрано" class="selectpicker"  data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
+                                <div><select id="lecturesSelect1" title="Ничего не выбрано" class="selectpicker" data-live-search="true" asp-items=ViewBag.Lecturers></select><span>Выберите преподавателя</span></div>
                                 <div><select id="classroomsSelect1" title="Ничего не выбрано" class="selectpicker" data-live-search="true" asp-items=ViewBag.Classrooms></select><span>Выберите кабинет</span></div>
                                 <div><select id="subjectsSelect1" title="Ничего не выбрано" class="selectpicker" data-live-search="true" asp-items=ViewBag.Subjects></select><span>Выберите предмет</span></div>
                                 <div><select id="subjectTypesSelect1" title="Ничего не выбрано" class="selectpicker" data-live-search="true" asp-items=ViewBag.SubjectTypes></select><span>Выберите тип занятия</span></div>
@@ -144,6 +144,25 @@
 
     <script>
         var globalModalObj;
+
+        var groups = JSON.parse($('#groupsDiv').text());
+
+        groups.forEach(function (item) {
+            getAndPrintRecords(item.Id);
+        });
+
+        function getAndPrintRecords(groupId) {
+
+            $.ajax({
+                url: "GetRecordsByGroupId?id=" + groupId,
+            }).done(
+                function (data) {
+                    console.log("Sample of data:", data);
+                });
+
+        }
+
+
 
         function showModal(domObj) {
             globalModalObj = domObj;
