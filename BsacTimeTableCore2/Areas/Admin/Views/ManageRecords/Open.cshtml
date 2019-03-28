@@ -38,13 +38,13 @@
                             {
                                 <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
                                 <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
-                                <div class="SubjectName">@Model[c].Records[z].Subject?.Name @Model[c].Records[z + 1].Subject?.Name</div>
+                                <div class="SubjectAbname">@Model[c].Records[z].Subject?.AbnameSubject @Model[c].Records[z + 1].Subject?.AbnameSubject</div>
                             }
                             else
                             {
                                 <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
                                 <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
-                                <div class="SubjectName">@Model[c].Records[z + 2].Subject?.Name</div>
+                                <div class="SubjectAbname">@Model[c].Records[z + 2].Subject?.AbnameSubject</div>
                             }
 
                             @for (var i = 0; i < 3; i++)
@@ -208,7 +208,7 @@
                         .text($("#lecturesSelect1 :selected").text() + " " + $("#lecturesSelect2 :selected").text());
                     $(globalModalObj).find('.ClassroomName')
                         .text($("#classroomsSelect1 :selected").text() + " " + $("#classroomsSelect2 :selected").text());
-                    $(globalModalObj).find('.SubjectName')
+                    $(globalModalObj).find('.SubjectAbname')
                         .text($("#subjectsSelect1 :selected").text() + " " + $("#subjectsSelect2 :selected").text());
 
                     $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
@@ -231,7 +231,7 @@
                         .text($("#lecturesSelect1 :selected").text());
                     $(globalModalObj).find('.ClassroomName')
                         .text($("#classroomsSelect1 :selected").text());
-                    $(globalModalObj).find('.SubjectName')
+                    $(globalModalObj).find('.SubjectAbname')
                         .text($("#subjectsSelect1 :selected").text());
 
                     $(globalModalObj).find('.LecturerId1').val($("#lecturesSelect1").val());
@@ -249,7 +249,7 @@
                         .text($("#lecturesSelect2 :selected").text());
                     $(globalModalObj).find('.ClassroomName')
                         .text($("#classroomsSelect2 :selected").text());
-                    $(globalModalObj).find('.SubjectName')
+                    $(globalModalObj).find('.SubjectAbname')
                         .text($("#subjectsSelect2 :selected").text());
 
                     $(globalModalObj).find('.LecturerId2').val($("#lecturesSelect2").val());
@@ -269,7 +269,7 @@
 
                 $(globalModalObj).find('.LecturerName').text($("#lecturesSelect3 :selected").text());
                 $(globalModalObj).find('.ClassroomName').text($("#classroomsSelect3 :selected").text());
-                $(globalModalObj).find('.SubjectName').text($("#subjectsSelect3 :selected").text());
+                $(globalModalObj).find('.SubjectAbname').text($("#subjectsSelect3 :selected").text());
 
                 $(globalModalObj).find('.LecturerId3').val($("#lecturesSelect3").val());
                 $(globalModalObj).find('.ClassroomId3').val($("#classroomsSelect3").val());
@@ -289,7 +289,7 @@
             $(globalModalObj).find('.IsDeleted3').val(true);
             $(globalModalObj).find('.LecturerName').text("");
             $(globalModalObj).find('.ClassroomName').text("");
-            $(globalModalObj).find('.SubjectName').text("");
+            $(globalModalObj).find('.SubjectAbname').text("");
             $("#exampleModalLong").modal("hide");
         }
 
