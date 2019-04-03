@@ -59,8 +59,8 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             DateTime _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (_date.DayOfWeek == 0)
                 _date = _date.AddDays(-1);
-            var dateFrom = _date.AddDays(1-(int)_date.DayOfWeek);
-            var dateTo = _date.AddDays(7-(int)_date.DayOfWeek);
+            var dateFrom = _date.AddDays(1 - (int)_date.DayOfWeek);
+            var dateTo = _date.AddDays(7 - (int)_date.DayOfWeek);
             ViewBag.Lecturers = new SelectList(_context.Lecturers, "Id", "Name");
             ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "Name");
             var classrooms = _context.Classrooms.ToList();
@@ -128,15 +128,22 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         }
 
         // GET: Admin/Records/GetRecordsByGroupId
-        public async Task<string> GetRecordsByGroupId(int id)
+        public async Task<string> GetRecordsByGroupId(int id, string date)
         {
-            var recordsQuery = _context.Records.Select(x => new
-            {
-                x.Lecturer.Name,
-                x.Subject.AbnameSubject,
-                x.SubjectForId,
-                ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
-            });
+            var _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            if (_date.DayOfWeek == 0)
+                _date = _date.AddDays(-1);
+            var dateFrom = _date.AddDays(1 - (int)_date.DayOfWeek);
+            var dateTo = _date.AddDays(7 - (int)_date.DayOfWeek);
+            var recordsQuery = _context.Records
+                .Where(r => r.Date >= dateFrom && r.Date < dateTo && r.GroupId == id)
+                .Select(x => new
+                {
+                    x.Lecturer.Name,
+                    x.Subject.AbnameSubject,
+                    x.SubjectForId,
+                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
+                });
             return JsonConvert.SerializeObject(await recordsQuery.ToListAsync());
         }
     }

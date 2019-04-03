@@ -153,7 +153,7 @@
             if (groups[groupindex] == null)
                 return;
             $.ajax({
-                url: "GetRecordsByGroupId?id=" + groups[groupindex].groupId,
+                url: "GetRecordsByGroupId?id=" + groups[groupindex].Id + "&date=" + "@Context.Request.Query["date"]",
             }).done(
                 function (data) {
                     printRecords(JSON.parse(data));
