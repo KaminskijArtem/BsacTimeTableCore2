@@ -130,8 +130,14 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
         // GET: Admin/Records/GetRecordsByGroupId
         public async Task<string> GetRecordsByGroupId(int id)
         {
-            var applicationDbContext = _context.Records.Select(x => x.Subject.Name);
-            return JsonConvert.SerializeObject(await applicationDbContext.ToListAsync());
+            var recordsQuery = _context.Records.Select(x => new
+            {
+                x.Lecturer.Name,
+                x.Subject.AbnameSubject,
+                x.SubjectForId,
+                ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
+            });
+            return JsonConvert.SerializeObject(await recordsQuery.ToListAsync());
         }
     }
 }

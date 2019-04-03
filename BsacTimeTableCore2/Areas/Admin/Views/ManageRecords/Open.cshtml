@@ -23,7 +23,7 @@
 <div id="groupsDiv" hidden="hidden">@ViewBag.groupsJSON</div>
 <form asp-action="Open" asp-route-id=@Context.Request.Query["id"] asp-route-date=@Context.Request.Query["date"] method="post">
 
-    <table class="table table-bordered" style="margin-top: 2px;">
+    <table id="recordsTable" class="table table-bordered" style="margin-top: 2px;">
         @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
         <tbody>
             @for (int c = 0; c < Model.Count; c++)
@@ -146,23 +146,43 @@
         var globalModalObj;
 
         var groups = JSON.parse($('#groupsDiv').text());
+        var groupindex = 0;
+        getAndPrintRecords();
 
-        groups.forEach(function (item) {
-            getAndPrintRecords(item.Id);
-        });
-
-        function getAndPrintRecords(groupId) {
-
+        function getAndPrintRecords() {
+            if (groups[groupindex] == null)
+                return;
             $.ajax({
-                url: "GetRecordsByGroupId?id=" + groupId,
+                url: "GetRecordsByGroupId?id=" + groups[groupindex].groupId,
             }).done(
                 function (data) {
-                    console.log("Sample of data:", data);
+                    printRecords(JSON.parse(data));
+                    groupindex++;
+                    getAndPrintRecords();
                 });
-
         }
 
+        function printRecords(data) {
+            $("#recordsTable tbody").append(
+                "<tr>" +
+                "<td>" + groups[groupindex].Name + "</td>" +
+                getStringFromDataObj(data) +
+                "</tr>"
+            );
+        }
 
+        function getStringFromDataObj(data) {
+            var str = "";
+            data.forEach(function (element) {
+                console.log(element);
+                str += "<td onclick='showModal(this)'>" +
+                        "<div class='LecturerName'>" + element.Name + "</div>" +
+                        "<div class='ClassroomName'>" + element.ClassroomName + "</div>" +
+                        "<div class='SubjectAbname'>" + element.AbnameSubject + "</div>" +
+                    "</td>";
+            });
+            return str;
+        }
 
         function showModal(domObj) {
             globalModalObj = domObj;
