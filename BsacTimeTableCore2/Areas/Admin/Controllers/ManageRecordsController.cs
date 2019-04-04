@@ -136,12 +136,15 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             var dateFrom = _date.AddDays(1 - (int)_date.DayOfWeek);
             var dateTo = _date.AddDays(7 - (int)_date.DayOfWeek);
             var recordsQuery = _context.Records
-                .Where(r => r.Date >= dateFrom && r.Date < dateTo && r.GroupId == id)
+                .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id)
+                .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber).ThenBy(x => x.SubjectForId)
                 .Select(x => new
                 {
                     x.Lecturer.Name,
                     x.Subject.AbnameSubject,
                     x.SubjectForId,
+                    x.SubjOrdinalNumber,
+                    x.Date,
                     ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
                 });
             return JsonConvert.SerializeObject(await recordsQuery.ToListAsync());

@@ -26,7 +26,7 @@
     <table id="recordsTable" class="table table-bordered" style="margin-top: 2px;">
         @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
         <tbody>
-            @for (int c = 0; c < Model.Count; c++)
+            @*@for (int c = 0; c < Model.Count; c++)
             {
                 <tr>
                     <td>@Model[c].Name</td>
@@ -64,7 +64,7 @@
                         </td>
                     }
                 </tr>
-            }
+            }*@
         </tbody>
     </table>
     <div style="display:inline;">
@@ -173,14 +173,36 @@
 
         function getStringFromDataObj(data) {
             var str = "";
-            data.forEach(function (element) {
-                console.log(element);
-                str += "<td onclick='showModal(this)'>" +
-                        "<div class='LecturerName'>" + element.Name + "</div>" +
-                        "<div class='ClassroomName'>" + element.ClassroomName + "</div>" +
-                        "<div class='SubjectAbname'>" + element.AbnameSubject + "</div>" +
-                    "</td>";
-            });
+            var c = 0;
+            var record = data[c];
+            for (var i = 1; i < 6; i++) {
+                for (var j = 1; j < 8; j++) {
+                        //if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i && x.SubjectForId == ij)).Any())
+                        //{
+                        //    g.Records.Add(new Record { GroupId = g.Id, SubjectForId = ij, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
+                        //}
+                    if (record != null && record.SubjOrdinalNumber == j && (new Date(record.Date)).getDay() == i) {
+                        str += "<td onclick='showModal(this)'>" +
+                            "<div class='LecturerName'>" + record.Name + "</div>" +
+                            "<div class='ClassroomName'>" + record.ClassroomName + "</div>" +
+                            "<div class='SubjectAbname'>" + record.AbnameSubject + "</div>" +
+                            "</td>";
+                        record = data[++c];
+                    }
+                    else {
+                        str += "<td onclick='showModal(this)'></td>";
+                    }
+                }
+            }
+
+            //data.forEach(function (element) {
+            //    console.log(element);
+            //    str += "<td onclick='showModal(this)'>" +
+            //            "<div class='LecturerName'>" + element.Name + "</div>" +
+            //            "<div class='ClassroomName'>" + element.ClassroomName + "</div>" +
+            //            "<div class='SubjectAbname'>" + element.AbnameSubject + "</div>" +
+            //        "</td>";
+            //});
             return str;
         }
 
