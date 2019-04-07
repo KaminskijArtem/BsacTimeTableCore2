@@ -135,9 +135,27 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 _date = _date.AddDays(-1);
             var dateFrom = _date.AddDays(1 - (int)_date.DayOfWeek);
             var dateTo = _date.AddDays(7 - (int)_date.DayOfWeek);
-            var recordsQuery = _context.Records
-                .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id)
-                .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber).ThenBy(x => x.SubjectForId)
+
+            //var recordsQuery2 = _context.Records
+            //    .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id)
+            //    .GroupBy(x => x.SubjectForId)
+            //    .OrderBy(x => x.Key)
+            //    .Select(x => new
+            //    {
+            //        SubjectForId = x.Key,
+            //        Items = x.Select(z => new
+            //        {
+            //            z.SubjOrdinalNumber,
+            //            z.Date,
+            //            z.Lecturer.Name,
+            //            z.Subject.AbnameSubject,
+            //            ClassroomName = z.Classroom.Name + " (к." + z.Classroom.Building + ")"
+            //        }).OrderBy(z => z.Date).ThenBy(z => z.SubjOrdinalNumber)
+            //    });
+
+            var recordsQuery1 = _context.Records
+                .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id && x.SubjectForId != 2)
+                .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
                 .Select(x => new
                 {
                     x.Lecturer.Name,
@@ -147,7 +165,25 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                     x.Date,
                     ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
                 });
-            return JsonConvert.SerializeObject(await recordsQuery.ToListAsync());
+
+            var recordsQuery2 = _context.Records
+                .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id && x.SubjectForId == 2)
+                .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
+                .Select(x => new
+                {
+                    x.Lecturer.Name,
+                    x.Subject.AbnameSubject,
+                    x.SubjectForId,
+                    x.SubjOrdinalNumber,
+                    x.Date,
+                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
+                });
+
+            return JsonConvert.SerializeObject(new
+            {
+                recordsForAllAndFirstSubgroup = await recordsQuery1.ToListAsync(),
+                recordsForSecondSubgroup = await recordsQuery2.ToListAsync()
+            });
         }
     }
 }

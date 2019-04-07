@@ -26,45 +26,45 @@
     <table id="recordsTable" class="table table-bordered" style="margin-top: 2px;">
         @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
         <tbody>
-            @*@for (int c = 0; c < Model.Count; c++)
-            {
-                <tr>
-                    <td>@Model[c].Name</td>
+            @for (int c = 0; c < Model.Count; c++)
+                {
+                    <tr>
+                        <td>@Model[c].Name</td>
 
-                    @for (var z = 0; z < Model[c].Records.Count(); z += 3)
-                    {
-                        <td @{if (Model[c].Records[z].SubjOrdinalNumber >= 5) { <text> class="567lesson" hidden="hidden" </text>  } } onclick="showModal(this)">
-                            @if (Model[c].Records[z].Id != 0 || Model[c].Records[z + 1].Id != 0)
-                            {
-                                <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
-                                <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
-                                <div class="SubjectAbname">@Model[c].Records[z].Subject?.AbnameSubject @Model[c].Records[z + 1].Subject?.AbnameSubject</div>
-                            }
-                            else
-                            {
-                                <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
-                                <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
-                                <div class="SubjectAbname">@Model[c].Records[z + 2].Subject?.AbnameSubject</div>
-                            }
+                        @for (var z = 0; z < Model[c].Records.Count(); z += 3)
+                        {
+                            <td @{if (Model[c].Records[z].SubjOrdinalNumber >= 5) { <text> class="567lesson" hidden="hidden" </text>  } } onclick="showModal(this)">
+                                @if (Model[c].Records[z].Id != 0 || Model[c].Records[z + 1].Id != 0)
+                                {
+                                    <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
+                                    <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
+                                    <div class="SubjectAbname">@Model[c].Records[z].Subject?.AbnameSubject @Model[c].Records[z + 1].Subject?.AbnameSubject</div>
+                                }
+                                else
+                                {
+                                    <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
+                                    <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
+                                    <div class="SubjectAbname">@Model[c].Records[z + 2].Subject?.AbnameSubject</div>
+                                }
 
-                            @for (var i = 0; i < 3; i++)
-                            {
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].Date" />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].GroupId" />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].ClassroomId" class=@("ClassroomId"+(i+1)) />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].LecturerId" class=@("LecturerId"+(i+1)) />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectForId" />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectId" class=@("SubjectId"+(i+1)) />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectTypeId" class=@("SubjectTypeId"+(i+1)) />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjOrdinalNumber" />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsChanged" class=@("IsChanged"+(i+1)) />
-                                <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsDeleted" class=@("IsDeleted"+(i+1)) />
-                            }
-                        </td>
-                    }
-                </tr>
-            }*@
+                                @for (var i = 0; i < 3; i++)
+                                {
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].Date" />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].GroupId" />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].ClassroomId" class=@("ClassroomId"+(i+1)) />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].LecturerId" class=@("LecturerId"+(i+1)) />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectForId" />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectId" class=@("SubjectId"+(i+1)) />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectTypeId" class=@("SubjectTypeId"+(i+1)) />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjOrdinalNumber" />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsChanged" class=@("IsChanged"+(i+1)) />
+                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsDeleted" class=@("IsDeleted"+(i+1)) />
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
         </tbody>
     </table>
     <div style="display:inline;">
@@ -165,8 +165,13 @@
         function printRecords(data) {
             $("#recordsTable tbody").append(
                 "<tr>" +
-                "<td>" + groups[groupindex].Name + "</td>" +
-                getStringFromDataObj(data) +
+                "<td rowspan='2'>" + groups[groupindex].Name + "</td>" +
+                getStringFromDataObj(data.recordsForAllAndFirstSubgroup) +
+                "</tr>"
+            );
+            $("#recordsTable tbody").append(
+                "<tr>" +
+                getStringFromDataObj(data.recordsForSecondSubgroup) +
                 "</tr>"
             );
         }
@@ -174,15 +179,14 @@
         function getStringFromDataObj(data) {
             var str = "";
             var c = 0;
+            var rowSpan;
             var record = data[c];
             for (var i = 1; i < 6; i++) {
                 for (var j = 1; j < 8; j++) {
-                        //if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i && x.SubjectForId == ij)).Any())
-                        //{
-                        //    g.Records.Add(new Record { GroupId = g.Id, SubjectForId = ij, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
-                        //}
+
                     if (record != null && record.SubjOrdinalNumber == j && (new Date(record.Date)).getDay() == i) {
-                        str += "<td onclick='showModal(this)'>" +
+                        rowSpan = record.SubjectForId == 3 ? 2 : 1;
+                        str += "<td rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
                             "<div class='LecturerName'>" + record.Name + "</div>" +
                             "<div class='ClassroomName'>" + record.ClassroomName + "</div>" +
                             "<div class='SubjectAbname'>" + record.AbnameSubject + "</div>" +
