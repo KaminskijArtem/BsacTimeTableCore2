@@ -1,6 +1,4 @@
-﻿@model List<BsacTimeTableCore2.Data.DBModels.Group>
-
-@{
+﻿@{
     ViewData["Title"] = "Open";
 }
 <style>
@@ -26,52 +24,13 @@
     <table id="recordsTable" class="table table-bordered" style="margin-top: 2px;">
         @await Html.PartialAsync("_ManageRecordsOpenHeadPartial")
         <tbody>
-            @for (int c = 0; c < Model.Count; c++)
-                {
-                    <tr>
-                        <td>@Model[c].Name</td>
-
-                        @for (var z = 0; z < Model[c].Records.Count(); z += 3)
-                        {
-                            <td @{if (Model[c].Records[z].SubjOrdinalNumber >= 5) { <text> class="567lesson" hidden="hidden" </text>  } } onclick="showModal(this)">
-                                @if (Model[c].Records[z].Id != 0 || Model[c].Records[z + 1].Id != 0)
-                                {
-                                    <div class="LecturerName">@Model[c].Records[z].Lecturer?.Name @Model[c].Records[z + 1].Lecturer?.Name</div>
-                                    <div class="ClassroomName">@Model[c].Records[z].Classroom?.Name @Model[c].Records[z + 1].Classroom?.Name </div>
-                                    <div class="SubjectAbname">@Model[c].Records[z].Subject?.AbnameSubject @Model[c].Records[z + 1].Subject?.AbnameSubject</div>
-                                }
-                                else
-                                {
-                                    <div class="LecturerName">@Model[c].Records[z + 2].Lecturer?.Name</div>
-                                    <div class="ClassroomName">@Model[c].Records[z + 2].Classroom?.Name </div>
-                                    <div class="SubjectAbname">@Model[c].Records[z + 2].Subject?.AbnameSubject</div>
-                                }
-
-                                @for (var i = 0; i < 3; i++)
-                                {
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].Id" />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].Date" />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].GroupId" />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].ClassroomId" class=@("ClassroomId"+(i+1)) />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].LecturerId" class=@("LecturerId"+(i+1)) />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectForId" />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectId" class=@("SubjectId"+(i+1)) />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjectTypeId" class=@("SubjectTypeId"+(i+1)) />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].SubjOrdinalNumber" />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsChanged" class=@("IsChanged"+(i+1)) />
-                                    <input hidden="hidden" asp-for="@Model[c].Records[z+i].IsDeleted" class=@("IsDeleted"+(i+1)) />
-                                }
-                            </td>
-                        }
-                    </tr>
-                }
         </tbody>
     </table>
     <div style="display:inline;">
         <label class="form-check-label" for="defaultCheck2">
             Показать/спрятать 5,6,7 пары:
         </label>
-        <input class="form-check-input" type="checkbox" id="defaultCheck2" onclick="changeShow567lessons()">
+        <input class="form-check-input" type="checkbox" id="defaultCheck2" onclick="changeShow567lessons()" checked>
     </div>
     <div style="display:inline; padding-left:20px" onclick="downloadTTInDocx()"><input value="Скачать в формате .docx" class="btn btn-info" /></div>
     <div style="float: right; padding-right: 20px"><input type="submit" value="Сохранить" class="btn btn-success" /></div>
@@ -163,51 +122,66 @@
         }
 
         function printRecords(data) {
+            var stringsObj = getStringsObjFromDataObj(data);
             $("#recordsTable tbody").append(
                 "<tr>" +
                 "<td rowspan='2'>" + groups[groupindex].Name + "</td>" +
-                getStringFromDataObj(data.recordsForAllAndFirstSubgroup) +
+                stringsObj.str1 +
                 "</tr>"
             );
             $("#recordsTable tbody").append(
                 "<tr>" +
-                getStringFromDataObj(data.recordsForSecondSubgroup) +
+                stringsObj.str2 +
                 "</tr>"
             );
         }
 
-        function getStringFromDataObj(data) {
-            var str = "";
-            var c = 0;
+        function getStringsObjFromDataObj(data) {
+            var str1 = "";
+            var str2 = "";
+            var c1 = 0;
+            var c2 = 0;
             var rowSpan;
-            var record = data[c];
+            var record1 = data.recordsForAllAndFirstSubgroup[c1];
+            var record2 = data.recordsForSecondSubgroup[c2];
+
             for (var i = 1; i < 6; i++) {
                 for (var j = 1; j < 8; j++) {
 
-                    if (record != null && record.SubjOrdinalNumber == j && (new Date(record.Date)).getDay() == i) {
-                        rowSpan = record.SubjectForId == 3 ? 2 : 1;
-                        str += "<td rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
-                            "<div class='LecturerName'>" + record.Name + "</div>" +
-                            "<div class='ClassroomName'>" + record.ClassroomName + "</div>" +
-                            "<div class='SubjectAbname'>" + record.AbnameSubject + "</div>" +
+                    var isPrintedRecordForBothSubgroups = false;
+                    var rowSpan = 1;
+
+                    if (record1 != null && record1.SubjOrdinalNumber == j && (new Date(record1.Date)).getDay() == i) {
+                        if (record1.SubjectForId == 3) {
+                            rowSpan = 2;
+                            isPrintedRecordForBothSubgroups = true;
+                        }
+                        str1 += "<td rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
+                            "<div class='LecturerName'>" + record1.Name + "</div>" +
+                            "<div class='ClassroomName'>" + record1.ClassroomName + "</div>" +
+                            "<div class='SubjectAbname'>" + record1.AbnameSubject + "</div>" +
                             "</td>";
-                        record = data[++c];
+                        record1 = data.recordsForAllAndFirstSubgroup[++c1];
                     }
                     else {
-                        str += "<td onclick='showModal(this)'></td>";
+                        str1 += "<td onclick='showModal(this)'></td>";
+                    }
+
+                    if (record2 != null && record2.SubjOrdinalNumber == j && (new Date(record2.Date)).getDay() == i) {
+                        str2 += "<td onclick='showModal(this)'>" +
+                            "<div class='LecturerName'>" + record2.Name + "</div>" +
+                            "<div class='ClassroomName'>" + record2.ClassroomName + "</div>" +
+                            "<div class='SubjectAbname'>" + record2.AbnameSubject + "</div>" +
+                            "</td>";
+                        record2 = data.recordsForSecondSubgroup[++c2];
+                    }
+                    else if (!isPrintedRecordForBothSubgroups){
+                        str2 += "<td onclick='showModal(this)'></td>";
                     }
                 }
             }
 
-            //data.forEach(function (element) {
-            //    console.log(element);
-            //    str += "<td onclick='showModal(this)'>" +
-            //            "<div class='LecturerName'>" + element.Name + "</div>" +
-            //            "<div class='ClassroomName'>" + element.ClassroomName + "</div>" +
-            //            "<div class='SubjectAbname'>" + element.AbnameSubject + "</div>" +
-            //        "</td>";
-            //});
-            return str;
+            return { str1, str2 };
         }
 
         function showModal(domObj) {
@@ -229,7 +203,7 @@
             $("#subjectsSelect3").val($(domObj).find('.SubjectId3').val());
             $("#subjectTypesSelect3").val($(domObj).find('.SubjectTypeId3').val());
 
-            if ($(domObj).find('.LecturerId1').val() != 0 || $(domObj).find('.LecturerId2').val() != 0) {
+            if ($(domObj).find('.LecturerId1').val() != null || $(domObj).find('.LecturerId2').val() != null) {
                 $('#defaultCheck1').prop("checked", true);
             }
             else {

@@ -51,10 +51,8 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
         public async Task<IActionResult> Open(int? id, string date)
         {
-            ViewBag.groupsJSON = JsonConvert.SerializeObject(await _context
-                .Groups
-                .Where(x => x.FacultyId == id)
-                .ToListAsync());
+            ViewBag.groupsJSON = JsonConvert.SerializeObject(
+                await _context.Groups.Where(x => x.FacultyId == id).ToListAsync());
 
             DateTime _date = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (_date.DayOfWeek == 0)
@@ -69,62 +67,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
             ViewBag.SubjectTypes = new SelectList(_context.SubjectTypes, "Id", "Name");
             ViewBag.DateFrom = dateFrom;
 
-            var listGroups = await _context.Groups.Where(x => x.FacultyId == id)
-                .Include(r => r.Records)
-                .Include("Records.Lecturer")
-                .Include("Records.Subject")
-                .Include("Records.Classroom")
-                .ToListAsync();
-            listGroups.ForEach(x => x.Records = x.Records.Where(r => r.Date >= dateFrom && r.Date < dateTo).ToList());//TODO: Refactor to custom join
-            listGroups = SetUpRecords(listGroups, dateFrom);
-            return View(listGroups);
-        }
-
-        [HttpPost]
-        public IActionResult Open(List<Group> groups)
-        {
-            var deletingRecords = new List<Record>();
-            var insertingRecords = new List<Record>();
-            var updatingRecords = new List<Record>();
-            foreach (var g in groups)
-            {
-                var ir = g.Records.Where(x => (x.Id == 0 && x.IsChanged != null));
-                insertingRecords = insertingRecords.Concat(ir).ToList();
-                var ur = g.Records.Where(x => x.Id != 0 && x.IsChanged != null && x.IsDeleted == null);
-                updatingRecords = updatingRecords.Concat(ur).ToList();
-                var dl = g.Records.Where(x => x.Id != 0 && x.IsDeleted != null);
-                deletingRecords = deletingRecords.Concat(dl).ToList();
-            }
-            insertingRecords.ForEach(x => x.IsChanged = null);
-            updatingRecords.ForEach(x => x.IsChanged = null);
-            _context.Records.AddRange(insertingRecords);
-            _context.UpdateRange(updatingRecords);
-            _context.RemoveRange(deletingRecords);
-            var s = _context.SaveChanges();
-            return Redirect(Request.Path + Request.QueryString);
-        }
-
-        private List<Group> SetUpRecords(List<Group> listGroups, DateTime dt)
-        {
-            foreach (var g in listGroups)
-            {
-                for (var i = 1; i < 6; i++)
-                {
-                    for (var j = 1; j < 8; j++)
-                    {
-                        for (var ij = 1; ij < 4; ij++)
-                        {
-                            if (!g.Records.Where(x => (x.SubjOrdinalNumber == j && (int)x.Date.DayOfWeek == i && x.SubjectForId == ij)).Any())
-                            {
-                                g.Records.Add(new Record { GroupId = g.Id, SubjectForId = ij, SubjOrdinalNumber = j, Date = dt.AddDays(i - 1) });
-                            }
-                        }
-                    }
-                }
-                g.Records = g.Records.OrderBy(x => x.Date.Date).ThenBy(x => x.SubjOrdinalNumber).ThenBy(x => x.SubjectForId).ToList();
-            }
-
-            return listGroups;
+            return View();
         }
 
         // GET: Admin/Records/GetRecordsByGroupId
@@ -135,23 +78,6 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 _date = _date.AddDays(-1);
             var dateFrom = _date.AddDays(1 - (int)_date.DayOfWeek);
             var dateTo = _date.AddDays(7 - (int)_date.DayOfWeek);
-
-            //var recordsQuery2 = _context.Records
-            //    .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id)
-            //    .GroupBy(x => x.SubjectForId)
-            //    .OrderBy(x => x.Key)
-            //    .Select(x => new
-            //    {
-            //        SubjectForId = x.Key,
-            //        Items = x.Select(z => new
-            //        {
-            //            z.SubjOrdinalNumber,
-            //            z.Date,
-            //            z.Lecturer.Name,
-            //            z.Subject.AbnameSubject,
-            //            ClassroomName = z.Classroom.Name + " (к." + z.Classroom.Building + ")"
-            //        }).OrderBy(z => z.Date).ThenBy(z => z.SubjOrdinalNumber)
-            //    });
 
             var recordsQuery1 = _context.Records
                 .Where(x => x.Date >= dateFrom && x.Date < dateTo && x.GroupId == id && x.SubjectForId != 2)

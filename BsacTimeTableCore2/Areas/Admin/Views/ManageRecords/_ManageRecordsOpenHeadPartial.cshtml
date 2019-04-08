@@ -1,18 +1,18 @@
 ﻿<thead>
     <tr>
         <th rowspan="2"></th>
-        <th class="columnDayName" colspan="4">Понедельник (@ViewBag.DateFrom.ToString("dd.MM.yyyy"))</th>
-        <th class="columnDayName" colspan="4">Вторник (@ViewBag.DateFrom.AddDays(1).ToString("dd.MM.yyyy"))</th>
-        <th class="columnDayName" colspan="4">Среда (@ViewBag.DateFrom.AddDays(2).ToString("dd.MM.yyyy"))</th>
-        <th class="columnDayName" colspan="4">Четверг (@ViewBag.DateFrom.AddDays(3).ToString("dd.MM.yyyy"))</th>
-        <th class="columnDayName" colspan="4">Пятница (@ViewBag.DateFrom.AddDays(4).ToString("dd.MM.yyyy"))</th>
+        <th class="columnDayName" colspan="7">Понедельник (@ViewBag.DateFrom.ToString("dd.MM.yyyy"))</th>
+        <th class="columnDayName" colspan="7">Вторник (@ViewBag.DateFrom.AddDays(1).ToString("dd.MM.yyyy"))</th>
+        <th class="columnDayName" colspan="7">Среда (@ViewBag.DateFrom.AddDays(2).ToString("dd.MM.yyyy"))</th>
+        <th class="columnDayName" colspan="7">Четверг (@ViewBag.DateFrom.AddDays(3).ToString("dd.MM.yyyy"))</th>
+        <th class="columnDayName" colspan="7">Пятница (@ViewBag.DateFrom.AddDays(4).ToString("dd.MM.yyyy"))</th>
     </tr>
     <tr>
         @for(var i = 1; i < 6; i++)
         {
             @for(var j = 1; j < 8; j++)
             {
-                <th @{if (j >= 5) { <text> class="567lesson" hidden="hidden"</text>  } }>@j</th>
+                <th @{if (j >= 5) { <text> class="567lesson" </text>  } }>@j</th>
             }
         }
     </tr>
