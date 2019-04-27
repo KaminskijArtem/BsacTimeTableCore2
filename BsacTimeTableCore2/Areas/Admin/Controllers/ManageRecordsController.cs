@@ -107,6 +107,7 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
 
             return JsonConvert.SerializeObject(new
             {
+                groupId = id,
                 recordsForAllAndFirstSubgroup = await recordsQuery1.ToListAsync(),
                 recordsForSecondSubgroup = await recordsQuery2.ToListAsync()
             });

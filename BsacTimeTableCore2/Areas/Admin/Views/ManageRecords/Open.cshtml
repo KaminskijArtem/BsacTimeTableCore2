@@ -150,17 +150,14 @@
 
                     var isPrintedRecordForBothSubgroups = false;
                     var rowSpan = 1;
+                    var hash = data.groupId.toString().concat('_', i, '_', j);
 
                     if (record1 != null && record1.SubjOrdinalNumber == j && (new Date(record1.Date)).getDay() == i) {
                         if (record1.SubjectForId == 3) {
                             rowSpan = 2;
                             isPrintedRecordForBothSubgroups = true;
                         }
-                        str1 += "<td rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
-                            "<div class='LecturerName'>" + record1.Name + "</div>" +
-                            "<div class='ClassroomName'>" + record1.ClassroomName + "</div>" +
-                            "<div class='SubjectAbname'>" + record1.AbnameSubject + "</div>" +
-                            "</td>";
+                        str1 += getStringFromRecordAndRowspan(record1, rowSpan, hash);
                         record1 = data.recordsForAllAndFirstSubgroup[++c1];
                     }
                     else {
@@ -168,11 +165,7 @@
                     }
 
                     if (record2 != null && record2.SubjOrdinalNumber == j && (new Date(record2.Date)).getDay() == i) {
-                        str2 += "<td onclick='showModal(this)'>" +
-                            "<div class='LecturerName'>" + record2.Name + "</div>" +
-                            "<div class='ClassroomName'>" + record2.ClassroomName + "</div>" +
-                            "<div class='SubjectAbname'>" + record2.AbnameSubject + "</div>" +
-                            "</td>";
+                        str2 += getStringFromRecordAndRowspan(record2, 1, hash);
                         record2 = data.recordsForSecondSubgroup[++c2];
                     }
                     else if (!isPrintedRecordForBothSubgroups){
@@ -184,8 +177,23 @@
             return { str1, str2 };
         }
 
+        function getStringFromRecordAndRowspan(record, rowSpan, hash) {
+            return "<td recordHash='" + hash + "' rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
+                "<div class='LecturerName'>" + record.Name + "</div>" +
+                "<div class='ClassroomName'>" + record.ClassroomName + "</div>" +
+                "<div class='SubjectAbname'>" + record.AbnameSubject + "</div>" +
+                "</td>";
+        }
+
         function showModal(domObj) {
             globalModalObj = domObj;
+            var recordHash = $(domObj).attr('recordHash');
+
+            if ($("td[recordHash='" + recordHash + "']").length > 1)
+                $('#defaultCheck1').prop("checked", true);
+            else
+                $('#defaultCheck1').prop("checked", false);
+
             $("#exampleModalLong").modal();
 
             $("#lecturesSelect1").val($(domObj).find('.LecturerId1').val());
@@ -203,12 +211,7 @@
             $("#subjectsSelect3").val($(domObj).find('.SubjectId3').val());
             $("#subjectTypesSelect3").val($(domObj).find('.SubjectTypeId3').val());
 
-            if ($(domObj).find('.LecturerId1').val() != null || $(domObj).find('.LecturerId2').val() != null) {
-                $('#defaultCheck1').prop("checked", true);
-            }
-            else {
-                $('#defaultCheck1').prop("checked", false);
-            }
+            
 
             changeModalInputs();
 
