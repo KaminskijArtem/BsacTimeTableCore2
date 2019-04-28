@@ -84,12 +84,16 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
                 .Select(x => new
                 {
+                    x.LecturerId,
                     x.Lecturer.Name,
+                    x.SubjectId,
                     x.Subject.AbnameSubject,
                     x.SubjectForId,
                     x.SubjOrdinalNumber,
                     x.Date,
-                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
+                    x.ClassroomId,
+                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")",
+                    x.SubjectTypeId
                 });
 
             var recordsQuery2 = _context.Records
@@ -97,12 +101,16 @@ namespace BsacTimeTableCore2.Areas.Admin.Controllers
                 .OrderBy(x => x.Date).ThenBy(x => x.SubjOrdinalNumber)
                 .Select(x => new
                 {
+                    x.LecturerId,
                     x.Lecturer.Name,
+                    x.SubjectId,
                     x.Subject.AbnameSubject,
                     x.SubjectForId,
                     x.SubjOrdinalNumber,
                     x.Date,
-                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")"
+                    x.ClassroomId,
+                    ClassroomName = x.Classroom.Name + " (к." + x.Classroom.Building + ")",
+                    x.SubjectTypeId
                 });
 
             return JsonConvert.SerializeObject(new

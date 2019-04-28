@@ -179,40 +179,42 @@
 
         function getStringFromRecordAndRowspan(record, rowSpan, hash) {
             return "<td recordHash='" + hash + "' rowspan='" + rowSpan + "' onclick='showModal(this)'>" +
-                "<div class='LecturerName'>" + record.Name + "</div>" +
-                "<div class='ClassroomName'>" + record.ClassroomName + "</div>" +
-                "<div class='SubjectAbname'>" + record.AbnameSubject + "</div>" +
+                "<div value=" + record.LecturerId + " class='Lecturer'>" + record.Name + "</div>" +
+                "<div value=" + record.ClassroomId + " class='Classroom'>" + record.ClassroomName + "</div>" +
+                "<div value=" + record.SubjectId + " class='Subject'>" + record.AbnameSubject + "</div>" +
+                "<div hidden value=" + record.SubjectTypeId + " class='SubjectType'></div>" +
                 "</td>";
         }
 
         function showModal(domObj) {
-            globalModalObj = domObj;
-            var recordHash = $(domObj).attr('recordHash');
 
-            if ($("td[recordHash='" + recordHash + "']").length > 1)
-                $('#defaultCheck1').prop("checked", true);
-            else
-                $('#defaultCheck1').prop("checked", false);
-
-            $("#exampleModalLong").modal();
-
-            $("#lecturesSelect1").val($(domObj).find('.LecturerId1').val());
-            $("#classroomsSelect1").val($(domObj).find('.ClassroomId1').val());
-            $("#subjectsSelect1").val($(domObj).find('.SubjectId1').val());
-            $("#subjectTypesSelect1").val($(domObj).find('.SubjectTypeId1').val());
-
-            $("#lecturesSelect2").val($(domObj).find('.LecturerId2').val());
-            $("#classroomsSelect2").val($(domObj).find('.ClassroomId2').val());
-            $("#subjectsSelect2").val($(domObj).find('.SubjectId2').val());
-            $("#subjectTypesSelect2").val($(domObj).find('.SubjectTypeId2').val());
-
-            $("#lecturesSelect3").val($(domObj).find('.LecturerId3').val());
-            $("#classroomsSelect3").val($(domObj).find('.ClassroomId3').val());
-            $("#subjectsSelect3").val($(domObj).find('.SubjectId3').val());
-            $("#subjectTypesSelect3").val($(domObj).find('.SubjectTypeId3').val());
-
+            var domJsObj = $(domObj);
+            var recordHash = domJsObj.attr('recordHash');
             
 
+            if ($("td[recordHash='" + recordHash + "']").length > 1) {
+                $('#defaultCheck1').prop("checked", true);
+
+                $("#lecturesSelect1").val(domJsObj.find('.LecturerId1').val());
+                $("#classroomsSelect1").val(domJsObj.find('.ClassroomId1').val());
+                $("#subjectsSelect1").val(domJsObj.find('.SubjectId1').val());
+                $("#subjectTypesSelect1").val(domJsObj.find('.SubjectTypeId1').val());
+
+                $("#lecturesSelect2").val(domJsObj.find('.LecturerId2').val());
+                $("#classroomsSelect2").val(domJsObj.find('.ClassroomId2').val());
+                $("#subjectsSelect2").val(domJsObj.find('.SubjectId2').val());
+                $("#subjectTypesSelect2").val(domJsObj.find('.SubjectTypeId2').val());
+            }
+
+            else {
+                $('#defaultCheck1').prop("checked", false);
+
+                $("#subjectsSelect3").val(domJsObj.find('.Subject').attr("value"));
+                $("#lecturesSelect3").val(domJsObj.find('.Lecturer').attr("value"));
+                $("#classroomsSelect3").val(domJsObj.find('.Classroom').attr("value"));
+                $("#subjectTypesSelect3").val(domJsObj.find('.SubjectType').attr("value"));
+            }
+            $("#exampleModalLong").modal();
             changeModalInputs();
 
             $('.selectpicker').selectpicker('refresh');
